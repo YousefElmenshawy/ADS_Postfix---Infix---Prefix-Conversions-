@@ -1,6 +1,5 @@
 #ifndef EXPRESSIONTREE_H
 #define EXPRESSIONTREE_H
-#include "node.h"
 #include<QString>
 
 using namespace std;
