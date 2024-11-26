@@ -24,7 +24,7 @@ private:
 
 public:
     ExpressionTree();
-    void buildfromPostfix(const QString & postfix);
+    void buildfromPostfix(const QString & postfix); // building expression tree from postfix expression
     TreeNode* buildfromPrefix(const QString & prefix, int & index);
     TreeNode* Helper_buildfromPrefix(const QString & prefix);
     void buildfromInfix(const QString & infix);
