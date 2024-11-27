@@ -9,10 +9,10 @@ class ExpressionTree
 private:
 
     struct TreeNode {
-        QChar value;
+        QString value;
         TreeNode* left;
         TreeNode* right;
-        TreeNode(QChar val) : value(val), left(nullptr), right(nullptr) {}
+        TreeNode(QString val) : value(val), left(nullptr), right(nullptr) {}
     };
     TreeNode* root;
 

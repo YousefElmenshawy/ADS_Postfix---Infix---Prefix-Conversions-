@@ -27,36 +27,48 @@ ExpressionTree::ExpressionTree():root(nullptr) {
 
     }
 
-void ExpressionTree::buildfromPostfix(const QString &postfix)// Saif Sabry
+void ExpressionTree::buildfromPostfix(const QString &postfix) // Saif Sabry
 {
-    if(postfix.isEmpty()){
+    if (postfix.isEmpty()) {
         root = nullptr;
         return;
     }
+
     stack<TreeNode*> s;
-    for(QChar ch: postfix){
-        if (!isOperator(ch) && !ch.isLetter()) {
-            throw std::invalid_argument("Invalid character in postfix expression!");
-        }
+    QString multi_digit;
+    for (QChar ch : postfix) {
+  if (ch.isDigit()) {
+      multi_digit.append(ch);
+  }
+  else {
+      if (!multi_digit.isEmpty()) {
+          s.push(new TreeNode(multi_digit));
+          multi_digit.clear();
+      }
 
-        if(!isOperator(ch)){
-            s.push(new TreeNode(ch));
-        }else{
-            if (s.size() < 2) {
-                throw std::invalid_argument("Invalid postfix expression: not enough operands for operator!");
-            }
-            TreeNode * rightChild = s.top();
-            s.pop();
-            TreeNode * leftChild = s.top();
-            s.pop();
+      if (isOperator(ch)) {
+          if (s.size() < 2) {
+              throw std::invalid_argument("Invalid postfix expression: not enough operands for operator!");
+          }
+          TreeNode* rightChild = s.top();
+          s.pop();
+          TreeNode* leftChild = s.top();
+          s.pop();
 
-            TreeNode* newNode = new TreeNode(ch);
-            newNode->left = leftChild;
-            newNode->right = rightChild;
-            s.push(newNode);
-        }
+          TreeNode* newNode = new TreeNode(ch);
+          newNode->left = leftChild;
+          newNode->right = rightChild;
+          s.push(newNode);
+      }
+      else if (!ch.isSpace()) {
+          throw std::invalid_argument("Invalid character in postfix expression!");
+      }
+  }
     }
-    if(s.size() != 1) {
+    if (!multi_digit.isEmpty()) {
+        s.push(new TreeNode(multi_digit));
+    }
+    if (s.size() != 1) {
         throw std::invalid_argument("Invalid postfix expression: too many operands!");
     }
     root = s.top();
