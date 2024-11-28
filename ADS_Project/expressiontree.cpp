@@ -1,9 +1,13 @@
 #include "expressiontree.h"
 #include <stack>
+#include <QString>
+#include <QVector>
 bool ExpressionTree::isOperator(QChar c){
   return c == '+' || c == '-' || c == '*' || c == '/';
 }
-
+bool ExpressionTree::isStringOperator(QString c){
+    return c == "+" || c == "-" || c == "*" || c == "/";
+}
 int ExpressionTree::precedence(QChar op) { // Helper Function for Build from Infix.(Yousef Elmenshawy)
 
     if(op=='+'||op=='-') {
@@ -87,24 +91,54 @@ void ExpressionTree::buildfromPostfix(const QString &postfix) // Saif Sabry
     root = s.top();
     s.pop();
 }
-TreeNode* ExpressionTree::buildfromPrefix(const QString & prefix, int & index) // Ahmed Amgad
+void ExpressionTree::buildfromPrefix(const QString & prefix) // Ahmed Amgad
 {
-    //base case
-    if (index >= prefix.length()){
-        return nullptr;
+    if (prefix.isEmpty()) {
+        throw std::invalid_argument("Prefix expression is empty!");
     }
-    TreeNode* root = new TreeNode(prefix[index]);
-    index++;
-    if(isOperator(prefix[index])){
-        root->left = buildfromPrefix(prefix, index);
-        root->right = buildfromPrefix(prefix, index);
+
+    stack<TreeNode*> s;
+    QVector<QString> tokens;
+
+    QString currentToken;
+    for (QChar ch : prefix) {
+        if (ch == ' ') {
+            if (!currentToken.isEmpty()) {
+                tokens.append(currentToken);
+                currentToken.clear();
+            }
+        } else {
+            currentToken.append(ch);
+        }
     }
-    return root;
-}
-TreeNode* ExpressionTree::Helper_buildfromPrefix(const QString & prefix) // Ahmed Amgad
-{
-  int index = 0;
-  return buildfromPrefix(prefix, index);
+
+    // Add the last token if any
+    if (!currentToken.isEmpty()) {
+        tokens.append(currentToken);  // Add the final token to the QVector
+    }
+
+    for (int i = tokens.size() - 1; i >= 0; --i) {
+        QString token = tokens[i];
+
+        if (isStringOperator(token)) {
+            if (s.size() < 2) {
+                throw std::invalid_argument("Invalid prefix expression: not enough operands for operator!");
+            }
+
+            TreeNode* node = new TreeNode(token);
+            node->left = s.top(); s.pop();
+            node->right = s.top(); s.pop();
+            s.push(node);
+        } else {
+            s.push(new TreeNode(token));
+        }
+    }
+
+    if (s.size() != 1) {
+        throw std::invalid_argument("Invalid prefix expression: too many operands!");
+    }
+
+    root = s.top();
 }
 
 void ExpressionTree::buildfromInfix(const QString &infix)// Yousef Elmenshawy
