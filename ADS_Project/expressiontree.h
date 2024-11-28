@@ -28,8 +28,8 @@ public:
     TreeNode* Helper_buildfromPrefix(const QString & prefix);
     void buildfromInfix(const QString & infix);
     QString ToInfix(TreeNode* Root);
-    QString ToPostfix();
-    QString ToPrefix();
+    QString ToPostfix(TreeNode* Root);
+    QString ToPrefix(TreeNode* Root);
 
 };
 

@@ -1,6 +1,5 @@
 #include "expressiontree.h"
 #include <stack>
-#include<cctype>
 bool ExpressionTree::isOperator(QChar c){
   return c == '+' || c == '-' || c == '*' || c == '/';
 }
@@ -238,12 +237,31 @@ QString ExpressionTree::ToInfix(TreeNode* Root)// Yousef Elmenshawy
    ToInfix(Root->right);
 }
 
-QString ExpressionTree::ToPostfix()
+QString ExpressionTree::ToPostfix(TreeNode* Root) //Koussay Jaballah
 {
+    QString PostfixExp = "";
+    if (Root == nullptr) {
+        return PostfixExp;  // Base case: If the node is null, return
+    }
 
+    ToPostfix(Root->left); //Traverse left
+    ToPostfix(Root->right); //Traverse right
+
+    PostfixExp+= Root->value; // visit the node
+    PostfixExp+=" ";
 }
 
-QString ExpressionTree::ToPrefix()
+QString ExpressionTree::ToPrefix(TreeNode* Root) //Koussay Jaballah
 {
+    QString PrefixExp = "";
+    if (Root == nullptr) {
+        return PrefixExp;  // Base case: If the node is null, return
+    }
+    PrefixExp+= Root->value; // visit the node
+    PrefixExp+=" ";
+
+    ToPrefix(Root->left); //Traverse left
+    ToPrefix(Root->right); //Traverse right
+
 
 }
