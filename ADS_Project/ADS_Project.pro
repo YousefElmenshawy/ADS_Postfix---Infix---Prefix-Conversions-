@@ -12,14 +12,14 @@ SOURCES += \
     conversionwindow.cpp \
     expressiontree.cpp \
     main.cpp \
-    mainwindow.cpp \
-    node.cpp
+    mainwindow.cpp
+
 
 HEADERS += \
     conversionwindow.h \
     expressiontree.h \
-    mainwindow.h \
-    node.h
+    mainwindow.h
+
 
 FORMS += \
     conversionwindow.ui \
@@ -29,3 +29,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    Resource_file.qrc

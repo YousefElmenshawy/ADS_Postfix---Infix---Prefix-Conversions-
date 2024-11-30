@@ -2,6 +2,27 @@
 #include <stack>
 #include <QString>
 #include <QVector>
+#include<iostream>
+using namespace std;
+ExpressionTree::ExpressionTree():root(nullptr) {
+
+}
+
+void ExpressionTree::clearTree(TreeNode *node) {
+    if (node == nullptr) return;
+    clearTree(node->left);
+    clearTree(node->right);
+    delete node;
+}
+
+void ExpressionTree::reset() {
+    clearTree(root);
+    root = nullptr;
+}
+
+ExpressionTree::~ExpressionTree() {
+    clearTree(root);
+}
 bool ExpressionTree::isOperator(QChar c){
   return c == '+' || c == '-' || c == '*' || c == '/';
 }
@@ -23,26 +44,6 @@ int ExpressionTree::precedence(QChar op) { // Helper Function for Build from Inf
     // - Return 2 for *, /, and %
     // - Return 0 for any other character (default case)
 }
-
-
-void ExpressionTree::PreOrderTraversal()
-{
-
-}
-
-void ExpressionTree::PostOrderTraversal()
-{
-
-}
-
-ExpressionTree::ExpressionTree():root(nullptr) {
-
-
-
-
-
-
-    }
 
 void ExpressionTree::buildfromPostfix(const QString &postfix) // Saif Sabry
 {
@@ -141,134 +142,104 @@ void ExpressionTree::buildfromPrefix(const QString & prefix) // Ahmed Amgad
     root = s.top();
 }
 
-void ExpressionTree::buildfromInfix(const QString &infix)// Yousef Elmenshawy
-{
+void ExpressionTree::buildfromInfix(const QString &infix) {// Yousef Elmenshawy
+    if (infix.isEmpty()) {
+        cerr << "Error: Infix expression is empty!" << endl;
+        return;
+    }
 
-    stack<TreeNode*> nodeStack;  // Stack to hold TreeNode pointers (operands and subtrees)
-    stack<QChar> operatorStack;  // Stack to hold operators
+    stack<TreeNode*> nodeStack;       // Stack for operands/subtrees
+    stack<QChar> operatorStack;        // Stack for operators
 
-    int i = 0;  // Index to traverse the string
+    // Process the infix expression character by character
+    int i = 0;
     while (i < infix.size()) {
-        // Skip spaces
         if (infix[i].isSpace()) {
-            i++;
+            i++; // Skip whitespaces
             continue;
         }
 
-        // Handle multi-digit numbers
-        if (infix[i].isDigit()) {
+        if (infix[i].isDigit()) {// Handling Multidigit
             QString numStr;
             while (i < infix.size() && infix[i].isDigit()) {
-                numStr += infix[i];
-                i++;
+                numStr += infix[i++];
             }
-            // Create a new TreeNode for the number and push it to the node stack
-            TreeNode* numNode = new TreeNode(numStr);
-            nodeStack.push(numNode);
-            continue;  // Skip incrementing `i` as it's already done in the loop
+            nodeStack.push(new TreeNode(numStr));  // Push operand as a tree node
         }
-
-        // Handle opening parenthesis
         else if (infix[i] == '(') {
             operatorStack.push(infix[i]);
+            i++;
         }
-
-        // Handle closing parenthesis
         else if (infix[i] == ')') {
             while (!operatorStack.empty() && operatorStack.top() != '(') {
-                // Pop operator and create subtree
-                QChar op = operatorStack.top();
-                operatorStack.pop();
-
-                // Pop two nodes from the node stack
-                TreeNode* right = nodeStack.top();
-                nodeStack.pop();
-                TreeNode* left = nodeStack.top();
-                nodeStack.pop();
-
-                // Create a new operator node and attach left and right as children
-                TreeNode* opNode = new TreeNode(op);
-                opNode->left = left;
-                opNode->right = right;
-
-                // Push the new subtree back onto the node stack
-                nodeStack.push(opNode);
+                processOperator(nodeStack, operatorStack);
             }
             operatorStack.pop();  // Remove the '('
+            i++;
         }
-
-        // Handle operators
         else if (isOperator(infix[i])) {
-            while (!operatorStack.empty() &&
-                   precedence(operatorStack.top()) >= precedence(infix[i])) {
-                // Pop operator and create subtree
-                QChar op = operatorStack.top();
-                operatorStack.pop();
-
-                // Pop two nodes from the node stack
-                TreeNode* right = nodeStack.top();
-                nodeStack.pop();
-                TreeNode* left = nodeStack.top();
-                nodeStack.pop();
-
-                // Create a new operator node and attach left and right as children
-                TreeNode* opNode = new TreeNode(op);
-                opNode->left = left;
-                opNode->right = right;
-
-                // Push the new subtree back onto the node stack
-                nodeStack.push(opNode);
+            while (!operatorStack.empty() && precedence(operatorStack.top()) >= precedence(infix[i])) {
+                processOperator(nodeStack, operatorStack);
             }
-            operatorStack.push(infix[i]);  // Push current operator onto the stack
+            operatorStack.push(infix[i]);  // Push the current operator
+            i++;
         }
-
-        i++;  // Move to the next character
     }
 
-    // Process remaining operators in the operator stack
+    // Process remaining operators
     while (!operatorStack.empty()) {
-        QChar op = operatorStack.top();
-        operatorStack.pop();
-
-        // Pop two nodes from the node stack
-        TreeNode* right = nodeStack.top();
-        nodeStack.pop();
-        TreeNode* left = nodeStack.top();
-        nodeStack.pop();
-
-        // Create a new operator node and attach left and right as children
-        TreeNode* opNode = new TreeNode(op);
-        opNode->left = left;
-        opNode->right = right;
-
-        // Push the new subtree back onto the node stack
-        nodeStack.push(opNode);
+        processOperator(nodeStack, operatorStack);
     }
 
-    // The root of the tree will be the only element left in the node stack
-    root = nodeStack.top();
-    nodeStack.pop();
-
+    // The root of the tree is the only node left in the stack
+    if (!nodeStack.empty()) {
+        root = nodeStack.top();
+        nodeStack.pop();
+    } else {
+        cerr << "Error: Failed to build expression tree!" << endl;
+    }
 }
 
 
-
-QString ExpressionTree::ToInfix(TreeNode* Root)// Yousef Elmenshawy
+QString ExpressionTree::ToInfix(TreeNode *Root)
 {
-    QString InfixExp="";
+    QString InfixExp = "";
     if (Root == nullptr) {
         return InfixExp;  // Base case: If the node is null, return
     }
 
-    // Traverse the left subtree
-    ToInfix(Root->left);
+    InfixExp+= ToPostfix(Root->left); //Traverse left
 
-    // Visit the current node
-    InfixExp+= Root->value;
+    InfixExp+= Root->value; // visit the node
     InfixExp+=" ";
+    InfixExp+=ToPostfix(Root->right); //Traverse right
 
-    // Traverse the right subtree
-   ToInfix(Root->right);
+
+    return InfixExp;
+
+}
+
+void ExpressionTree::processOperator(stack<TreeNode*>& nodeStack, stack<QChar>& operatorStack) {// Helper function to avoid reptetion in Build from Infix code
+    if (nodeStack.size() < 2) {
+        cerr << "Error: Insufficient operands for operator!" << endl;
+        return;
+    }
+
+    // Pop operator
+    QChar op = operatorStack.top();
+    operatorStack.pop();
+
+    // Pop operands
+    TreeNode* right = nodeStack.top(); nodeStack.pop();
+    TreeNode* left = nodeStack.top(); nodeStack.pop();
+
+    // Create operator node
+    TreeNode* opNode = new TreeNode(QString(op));
+    opNode->left = left;
+    opNode->right = right;
+
+    // Push the new subtree
+    nodeStack.push(opNode);
 }
 
 QString ExpressionTree::ToPostfix(TreeNode* Root) //Koussay Jaballah
@@ -278,11 +249,12 @@ QString ExpressionTree::ToPostfix(TreeNode* Root) //Koussay Jaballah
         return PostfixExp;  // Base case: If the node is null, return
     }
 
-    ToPostfix(Root->left); //Traverse left
-    ToPostfix(Root->right); //Traverse right
+    PostfixExp+= ToPostfix(Root->left); //Traverse left
+     PostfixExp+=ToPostfix(Root->right); //Traverse right
 
     PostfixExp+= Root->value; // visit the node
     PostfixExp+=" ";
+    return PostfixExp;
 }
 
 QString ExpressionTree::ToPrefix(TreeNode* Root) //Koussay Jaballah
@@ -294,8 +266,13 @@ QString ExpressionTree::ToPrefix(TreeNode* Root) //Koussay Jaballah
     PrefixExp+= Root->value; // visit the node
     PrefixExp+=" ";
 
-    ToPrefix(Root->left); //Traverse left
-    ToPrefix(Root->right); //Traverse right
+    PrefixExp= PrefixExp+ ToPrefix(Root->left); //Traverse left
+   PrefixExp+= ToPrefix(Root->right); //Traverse right
 
+    return PrefixExp;
+}
 
+ExpressionTree::TreeNode *ExpressionTree::Root_Accesser()
+{
+    return root;
 }
