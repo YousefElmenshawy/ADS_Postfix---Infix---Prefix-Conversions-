@@ -19,7 +19,8 @@ private:
 
     //Helper Functions to be included in the Conversions
     bool isOperator(QChar ch);
-    bool isStringOperator(QString c);
+    bool isOperator(QString s);
+    double applyOperation(double a, double b, QChar op);
     int precedence(QChar op);
     void processOperator(stack<TreeNode*>& nodeStack, stack<QChar>& operatorStack);
 
@@ -30,7 +31,6 @@ public:
     void reset();
 
     ~ExpressionTree();
-    double applyOperation(double a, double b, QChar op);
     double evaluateExpression();
     void buildfromPostfix(const QString & postfix); // building expression tree from postfix expression
     void buildfromPrefix(const QString & prefix);
