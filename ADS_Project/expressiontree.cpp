@@ -25,10 +25,10 @@ ExpressionTree::~ExpressionTree() {
     clearTree(root);
 }
 bool ExpressionTree::isOperator(QChar c){
-  return c == '+' || c == '-' || c == '*' || c == '/';
+  return c == '+' || c == '-' || c == '*' || c == '/' || c == '%';
 }
-bool ExpressionTree::isStringOperator(QString c){
-    return c == "+" || c == "-" || c == "*" || c == "/";
+bool ExpressionTree::isOperator(QString s){
+    return s == "+" || s == "-" || s == "*" || s == "/" || s =="%";
 }
 int ExpressionTree::precedence(QChar op) { // Helper Function for Build from Infix.(Yousef Elmenshawy)
 
@@ -171,7 +171,7 @@ void ExpressionTree::buildfromPrefix(const QString & prefix) // Ahmed Amgad
     for (int i = tokens.size() - 1; i >= 0; --i) {
         QString token = tokens[i];
 
-        if (isStringOperator(token)) {
+        if (isOperator(token)) {
             if (s.size() < 2) {
                 throw std::invalid_argument("Invalid prefix expression: not enough operands for operator!");
             }
