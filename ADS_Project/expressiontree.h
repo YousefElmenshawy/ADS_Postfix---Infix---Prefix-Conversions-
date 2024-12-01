@@ -30,6 +30,8 @@ public:
     void reset();
 
     ~ExpressionTree();
+    double applyOperation(double a, double b, QChar op);
+    double evaluateExpression();
     void buildfromPostfix(const QString & postfix); // building expression tree from postfix expression
     void buildfromPrefix(const QString & prefix);
     void buildfromInfix(const QString & infix);

@@ -3,6 +3,7 @@
 #include <QString>
 #include <QVector>
 #include<iostream>
+#include <QTextStream>
 using namespace std;
 ExpressionTree::ExpressionTree():root(nullptr) {
 
@@ -43,6 +44,55 @@ int ExpressionTree::precedence(QChar op) { // Helper Function for Build from Inf
     // - Return 1 for + and -
     // - Return 2 for *, /, and %
     // - Return 0 for any other character (default case)
+}
+
+double ExpressionTree::applyOperation(double a, double b, QChar op) {
+    double result = 0;
+    int A=static_cast<int>(a); int B=static_cast<int>(b);
+    if (op == '+') {
+        result = a + b;
+    } else if (op == '-') {
+        result = a - b;
+    } else if (op == '*') {
+        result = a * b;
+    } else if (op == '/') {
+        if (b == 0) {
+            throw runtime_error("Error: Division by zero");
+        } else {
+            result = a / b;
+        }
+    } else if (op == '%') {
+        result = A % B;
+    }else {
+        throw runtime_error("Error: Invalid Operation");
+    }
+    return result;
+
+}
+
+double ExpressionTree::evaluateExpression()
+{
+    QString postfix = ToPostfix(root);
+    double result = 0;
+    stack<double> Store;
+    QTextStream ss(&postfix);
+    QString token;
+    while (!ss.atEnd()) {
+        ss >> token;
+        if(token[0].isDigit()) {
+            Store.push(token.toDouble());
+        }
+        else if(isOperator(token[0])) {
+
+            double a2 = Store.top(); Store.pop();
+            double a1=Store.top(); Store.pop();
+            result= applyOperation(a1,a2,token[0]);
+            Store.push(result);
+        }
+
+    }
+
+    return result;
 }
 
 void ExpressionTree::buildfromPostfix(const QString &postfix) // Saif Sabry
