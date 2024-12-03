@@ -3,11 +3,36 @@
 #include <QString>
 #include <QVector>
 #include<iostream>
+#include <QTextStream>
 using namespace std;
 ExpressionTree::ExpressionTree():root(nullptr) {
 
 }
+ExpressionTree::ExpressionTree(const ExpressionTree& other) : root(nullptr) {
+    if (other.root != nullptr) {
+        root = copyTree(other.root);
+    }
+}
+ExpressionTree::TreeNode* ExpressionTree::copyTree(TreeNode* node) {
+    if (node == nullptr) {
+        return nullptr;
+    }
+    TreeNode* newNode = new TreeNode(node->value);
+    newNode->left = copyTree(node->left);
+    newNode->right = copyTree(node->right);
 
+    return newNode;
+}
+ExpressionTree& ExpressionTree::operator=(const ExpressionTree& other) {
+    if (this == &other) {
+        return *this;
+    }
+    reset();
+    if (other.root != nullptr) {
+        root = copyTree(other.root);
+    }
+    return *this;
+}
 void ExpressionTree::clearTree(TreeNode *node) {
     if (node == nullptr) return;
     clearTree(node->left);
@@ -24,10 +49,10 @@ ExpressionTree::~ExpressionTree() {
     clearTree(root);
 }
 bool ExpressionTree::isOperator(QChar c){
-  return c == '+' || c == '-' || c == '*' || c == '/';
+  return c == '+' || c == '-' || c == '*' || c == '/' || c == '%';
 }
-bool ExpressionTree::isStringOperator(QString c){
-    return c == "+" || c == "-" || c == "*" || c == "/";
+bool ExpressionTree::isOperator(QString s){
+    return s == "+" || s == "-" || s == "*" || s == "/" || s =="%";
 }
 int ExpressionTree::precedence(QChar op) { // Helper Function for Build from Infix.(Yousef Elmenshawy)
 
@@ -43,6 +68,55 @@ int ExpressionTree::precedence(QChar op) { // Helper Function for Build from Inf
     // - Return 1 for + and -
     // - Return 2 for *, /, and %
     // - Return 0 for any other character (default case)
+}
+
+double ExpressionTree::applyOperation(double a, double b, QChar op) {
+    double result = 0;
+    int A=static_cast<int>(a); int B=static_cast<int>(b);
+    if (op == '+') {
+        result = a + b;
+    } else if (op == '-') {
+        result = a - b;
+    } else if (op == '*') {
+        result = a * b;
+    } else if (op == '/') {
+        if (b == 0) {
+            throw runtime_error("Error: Division by zero");
+        } else {
+            result = a / b;
+        }
+    } else if (op == '%') {
+        result = A % B;
+    }else {
+        throw runtime_error("Error: Invalid Operation");
+    }
+    return result;
+
+}
+
+double ExpressionTree::evaluateExpression()
+{
+    QString postfix = ToPostfix(root);
+    double result = 0;
+    stack<double> Store;
+    QTextStream ss(&postfix);
+    QString token;
+    while (!ss.atEnd()) {
+        ss >> token;
+        if(token[0].isDigit()) {
+            Store.push(token.toDouble());
+        }
+        else if(isOperator(token[0])) {
+
+            double a2 = Store.top(); Store.pop();
+            double a1=Store.top(); Store.pop();
+            result= applyOperation(a1,a2,token[0]);
+            Store.push(result);
+        }
+
+    }
+
+    return result;
 }
 
 void ExpressionTree::buildfromPostfix(const QString &postfix) // Saif Sabry
@@ -121,7 +195,7 @@ void ExpressionTree::buildfromPrefix(const QString & prefix) // Ahmed Amgad
     for (int i = tokens.size() - 1; i >= 0; --i) {
         QString token = tokens[i];
 
-        if (isStringOperator(token)) {
+        if (isOperator(token)) {
             if (s.size() < 2) {
                 throw std::invalid_argument("Invalid prefix expression: not enough operands for operator!");
             }
@@ -159,6 +233,7 @@ void ExpressionTree::buildfromInfix(const QString &infix) {// Yousef Elmenshawy
             continue;
         }
 
+
         if (infix[i].isDigit()) {// Handling Multidigit
             QString numStr;
             while (i < infix.size() && infix[i].isDigit()) {
@@ -176,6 +251,16 @@ void ExpressionTree::buildfromInfix(const QString &infix) {// Yousef Elmenshawy
             }
             operatorStack.pop();  // Remove the '('
             i++;
+        }
+        else if (infix[i] == '-' &&
+                   (i == 0 ||( infix[i - 1] == '(' && i>0) || (isOperator(infix[i - 1]) && i>0 )|| (infix[i-1]==' ' && i>0))) {
+            // Unary minus case: Start a negative number
+            i++; // Skip the '-'
+            QString numStr = "-";
+            while (i < infix.size() && infix[i].isDigit()) {
+                numStr += infix[i++];
+            }
+            nodeStack.push(new TreeNode(numStr));  // Push negative operand as a tree node
         }
         else if (isOperator(infix[i])) {
             while (!operatorStack.empty() && precedence(operatorStack.top()) >= precedence(infix[i])) {
@@ -201,18 +286,18 @@ void ExpressionTree::buildfromInfix(const QString &infix) {// Yousef Elmenshawy
 }
 
 
-QString ExpressionTree::ToInfix(TreeNode *Root)
+QString ExpressionTree::ToInfix(TreeNode *Root)// Yousef Elmenshawy
 {
     QString InfixExp = "";
     if (Root == nullptr) {
         return InfixExp;  // Base case: If the node is null, return
     }
 
-    InfixExp+= ToPostfix(Root->left); //Traverse left
+    InfixExp+= ToInfix(Root->left); //Traverse left
 
     InfixExp+= Root->value; // visit the node
     InfixExp+=" ";
-    InfixExp+=ToPostfix(Root->right); //Traverse right
+    InfixExp+= ToInfix(Root->right); //Traverse right
 
 
     return InfixExp;

@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     // Testing the program
     ExpressionTree Tree;
     QString PostfixExpression = "13 4 +";
-    QString InfixExpression= " 1+2*3/(6+7)";
+    QString InfixExpression= "-35 + 45 * -5";
     QString PrefixExpression = "+ + * 3 4 - 5 2 7";
     cerr << "Building tree for: " << PostfixExpression.toStdString() << endl;
 

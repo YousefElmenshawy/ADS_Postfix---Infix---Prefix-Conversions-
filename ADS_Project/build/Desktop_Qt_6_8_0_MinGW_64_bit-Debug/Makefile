@@ -244,6 +244,7 @@ Makefile: ../../ADS_Project.pro C:/Qt/6.8.0/mingw_64/mkspecs/win32-g++/qmake.con
 		C:/Qt/6.8.0/mingw_64/mkspecs/features/qt_config.prf \
 		C:/Qt/6.8.0/mingw_64/mkspecs/win32-g++/qmake.conf \
 		C:/Qt/6.8.0/mingw_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		C:/Qt/6.8.0/mingw_64/mkspecs/features/exclusive_builds.prf \
 		C:/Qt/6.8.0/mingw_64/mkspecs/features/toolchain.prf \
 		C:/Qt/6.8.0/mingw_64/mkspecs/features/default_pre.prf \
@@ -273,8 +274,8 @@ Makefile: ../../ADS_Project.pro C:/Qt/6.8.0/mingw_64/mkspecs/win32-g++/qmake.con
 		C:/Qt/6.8.0/mingw_64/lib/Qt6Gui.prl \
 		C:/Qt/6.8.0/mingw_64/lib/Qt6Core.prl \
 		C:/Qt/6.8.0/mingw_64/lib/Qt6EntryPoint.prl \
-		.qmake.stash \
-		C:/Qt/6.8.0/mingw_64/mkspecs/features/build_pass.prf
+		C:/Qt/6.8.0/mingw_64/mkspecs/features/build_pass.prf \
+		../../Resource_file.qrc
 	$(QMAKE) -o Makefile ..\..\ADS_Project.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug"
 C:/Qt/6.8.0/mingw_64/mkspecs/features/spec_pre.prf:
 C:/Qt/6.8.0/mingw_64/mkspecs/features/device_config.prf:
@@ -450,6 +451,7 @@ C:/Qt/6.8.0/mingw_64/mkspecs/features/qt_functions.prf:
 C:/Qt/6.8.0/mingw_64/mkspecs/features/qt_config.prf:
 C:/Qt/6.8.0/mingw_64/mkspecs/win32-g++/qmake.conf:
 C:/Qt/6.8.0/mingw_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 C:/Qt/6.8.0/mingw_64/mkspecs/features/exclusive_builds.prf:
 C:/Qt/6.8.0/mingw_64/mkspecs/features/toolchain.prf:
 C:/Qt/6.8.0/mingw_64/mkspecs/features/default_pre.prf:
@@ -479,8 +481,8 @@ C:/Qt/6.8.0/mingw_64/lib/Qt6Widgets.prl:
 C:/Qt/6.8.0/mingw_64/lib/Qt6Gui.prl:
 C:/Qt/6.8.0/mingw_64/lib/Qt6Core.prl:
 C:/Qt/6.8.0/mingw_64/lib/Qt6EntryPoint.prl:
-.qmake.stash:
 C:/Qt/6.8.0/mingw_64/mkspecs/features/build_pass.prf:
+../../Resource_file.qrc:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ..\..\ADS_Project.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug"
 
