@@ -36,7 +36,8 @@ public:
     double evaluateExpression();
     void buildfromPostfix(const QString & postfix); // building expression tree from postfix expression
     void buildfromPrefix(const QString & prefix);
-    void buildfromInfix(const QString & infix);
+    void buildfromInfix(QString & infix);
+    QString removeSpaces(const QString& str);
     QString ToInfix(TreeNode* Root);
     QString ToPostfix(TreeNode* Root);
     QString ToPrefix(TreeNode* Root);

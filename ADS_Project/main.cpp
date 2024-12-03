@@ -27,9 +27,9 @@ int main(int argc, char *argv[])
     Tree.reset();
     cerr << "Building tree for: " << InfixExpression.toStdString() << endl;
 
-    Tree.buildfromInfix(InfixExpression);
+    //Tree.buildfromInfix(InfixExpression);
     if (Tree.Root_Accesser()) {
-        cerr << "Postfix Expression: " << Tree.ToPostfix(Tree.Root_Accesser()).toStdString() << endl;
+        //cerr << "Postfix Expression: " << Tree.ToPostfix(Tree.Root_Accesser()).toStdString() << endl;
     } else {
         cerr << "Error: Tree was not constructed!" << endl;
     }

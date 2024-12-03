@@ -216,78 +216,88 @@ void ExpressionTree::buildfromPrefix(const QString & prefix) // Ahmed Amgad
     root = s.top();
 }
 
-void ExpressionTree::buildfromInfix(const QString &infix) {// Yousef Elmenshawy
-    if (infix.isEmpty()) {
-        cerr << "Error: Infix expression is empty!" << endl;
-        return;
+void ExpressionTree::buildfromInfix(QString &infix) {// Yousef Elmenshawy
+
+        // Yousef Elmenshawy
+        if (infix.isEmpty()) {
+            throw std::invalid_argument("Error: Infix expression is empty!");
+        }
+
+        // Remove spaces
+        infix=removeSpaces(infix);
+        stack<TreeNode*> nodeStack;       // Stack for operands/subtrees
+        stack<QChar> operatorStack;       // Stack for operators
+
+        // Process the infix expression character by character
+        int i = 0;
+        while (i < infix.size()) {
+            if (infix[i].isSpace()) {
+                i++; // Skip whitespaces
+                continue;
+            }
+
+            if (infix[i].isDigit() || infix[i].isLetter()) { // Handling multi-digit or variable names
+                QString numStr;
+                while (i < infix.size() && (infix[i].isDigit() || infix[i].isLetter())) {
+                    numStr += infix[i++];
+                }
+                nodeStack.push(new TreeNode(numStr)); // Push operand as a tree node
+            } else if (infix[i] == '(') {
+                operatorStack.push(infix[i]);
+                i++;
+            } else if (infix[i] == ')') {
+                while (!operatorStack.empty() && operatorStack.top() != '(') {
+                    processOperator(nodeStack, operatorStack);
+                }
+                operatorStack.pop(); // Remove the '('
+                i++;
+            } else if (infix[i] == '-' &&
+                       (i == 0 || infix[i - 1] == '(' || isOperator(infix[i - 1].toLatin1()))) {
+                // Unary minus case: Start a negative number
+                i++; // Skip the '-'
+                QString numStr = "-";
+                while (i < infix.size() && infix[i].isDigit()) {
+                    numStr += infix[i++];
+                }
+                nodeStack.push(new TreeNode(numStr)); // Push negative operand as a tree node
+            } else if (isOperator(infix[i].toLatin1())) {
+                while (!operatorStack.empty() &&
+                       precedence(operatorStack.top().toLatin1()) >= precedence(infix[i].toLatin1())) {
+                    processOperator(nodeStack, operatorStack);
+                }
+                operatorStack.push(infix[i]); // Push the current operator
+                i++;
+            }
+        }
+
+        // Process remaining operators
+        while (!operatorStack.empty()) {
+            processOperator(nodeStack, operatorStack);
+        }
+
+        // The root of the tree is the only node left in the stack
+        if (!nodeStack.empty()) {
+            root = nodeStack.top();
+            nodeStack.pop();
+        } else {
+            cerr << "Error: Failed to build expression tree!";
+        }
     }
 
-    stack<TreeNode*> nodeStack;       // Stack for operands/subtrees
-    stack<QChar> operatorStack;        // Stack for operators
 
-    // Process the infix expression character by character
-    int i = 0;
-    while (i < infix.size()) {
-        if (infix[i].isSpace()) {
-            i++; // Skip whitespaces
-            continue;
-        }
-
-
-        if (infix[i].isDigit()) {// Handling Multidigit
-            QString numStr;
-            while (i < infix.size() && infix[i].isDigit()) {
-                numStr += infix[i++];
+    QString ExpressionTree::removeSpaces(const QString& str) {
+        QString result;
+        for (QChar ch : str) {
+            if (!ch.isSpace()) {
+                result += ch;
             }
-            nodeStack.push(new TreeNode(numStr));  // Push operand as a tree node
         }
-        else if (infix[i] == '(') {
-            operatorStack.push(infix[i]);
-            i++;
-        }
-        else if (infix[i] == ')') {
-            while (!operatorStack.empty() && operatorStack.top() != '(') {
-                processOperator(nodeStack, operatorStack);
-            }
-            operatorStack.pop();  // Remove the '('
-            i++;
-        }
-        else if (infix[i] == '-' &&
-                   (i == 0 ||( infix[i - 1] == '(' && i>0) || (isOperator(infix[i - 1]) && i>0 )|| (infix[i-1]==' ' && i>0))) {
-            // Unary minus case: Start a negative number
-            i++; // Skip the '-'
-            QString numStr = "-";
-            while (i < infix.size() && infix[i].isDigit()) {
-                numStr += infix[i++];
-            }
-            nodeStack.push(new TreeNode(numStr));  // Push negative operand as a tree node
-        }
-        else if (isOperator(infix[i])) {
-            while (!operatorStack.empty() && precedence(operatorStack.top()) >= precedence(infix[i])) {
-                processOperator(nodeStack, operatorStack);
-            }
-            operatorStack.push(infix[i]);  // Push the current operator
-            i++;
-        }
+        return result;
     }
-
-    // Process remaining operators
-    while (!operatorStack.empty()) {
-        processOperator(nodeStack, operatorStack);
-    }
-
-    // The root of the tree is the only node left in the stack
-    if (!nodeStack.empty()) {
-        root = nodeStack.top();
-        nodeStack.pop();
-    } else {
-        cerr << "Error: Failed to build expression tree!" << endl;
-    }
-}
-
 
 QString ExpressionTree::ToInfix(TreeNode *Root)// Yousef Elmenshawy
 {
+
     QString InfixExp = "";
     if (Root == nullptr) {
         return InfixExp;  // Base case: If the node is null, return
