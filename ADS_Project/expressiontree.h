@@ -31,7 +31,7 @@ public:
     ExpressionTree(const ExpressionTree& other);
     ExpressionTree& operator=(const ExpressionTree& other);
     void reset();
-
+    void displayConversionMenu(ExpressionTree& tree);
     ~ExpressionTree();
     double evaluateExpression();
     void buildfromPostfix(const QString & postfix); // building expression tree from postfix expression
