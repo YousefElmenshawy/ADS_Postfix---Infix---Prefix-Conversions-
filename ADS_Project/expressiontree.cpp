@@ -374,9 +374,9 @@ ExpressionTree::TreeNode *ExpressionTree::Root_Accesser()
 void ExpressionTree::displayConversionMenu(ExpressionTree& tree) {
     QString input;
     string Input;
-    int choice;
+    int choice=0;
     cout << "Welcome to our Tree of expressions!";
-    while (true) {
+    while (choice!=7) {
         cout << "\nExpression Conversion Menu:\n";
         cout << "1. Infix to Postfix\n";
         cout << "2. Infix to Prefix\n";
@@ -387,11 +387,6 @@ void ExpressionTree::displayConversionMenu(ExpressionTree& tree) {
         cout << "7. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
-
-        if (choice == 7) {
-            cout << "Exiting the menu. Goodbye!\n";
-            break;
-        }
 
         cout << "Enter the expression: ";
         cin.ignore(); // Clear newline from the input buffer
@@ -424,8 +419,12 @@ void ExpressionTree::displayConversionMenu(ExpressionTree& tree) {
                 tree.buildfromPrefix(input);
                 cout << "Postfix Expression: " << tree.ToPostfix(tree.Root_Accesser()).toStdString() << "\n";
                 break;
+            case 7:
+                cout << "Exiting the menu. Goodbye!\n";
+                break;
             default:
                 cout << "Invalid choice! Please try again.\n";
+                break;
             }
         } catch (const std::exception& e) {
             cout << e.what() << "\n";// just in case if there were any errors inside the switch case but it should be fine
