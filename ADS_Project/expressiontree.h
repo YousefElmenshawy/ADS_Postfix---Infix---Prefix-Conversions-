@@ -48,7 +48,11 @@ public:
     QString ToPostfix(TreeNode* Root);
     QString ToPrefix(TreeNode* Root);
     TreeNode * Root_Accesser ();// helper function for the main
-    void visualizeTree(QGraphicsScene* scene, TreeNode* node, double x, double y, double xOffset, double yOffset);
+    void visualizeTree(QGraphicsScene* scene, TreeNode* root, double x, double y, double hOffset, double vOffset);
+    void traverseInorder(TreeNode* node, std::function<void(QString)> callback);
+    void traversePreorder(TreeNode* node, std::function<void(QString)> callback);
+    void traversePostorder(TreeNode* node, std::function<void(QString)> callback);
+    void startTraversal(const QString& type, std::function<void(QString)> callback);
 
 
 };

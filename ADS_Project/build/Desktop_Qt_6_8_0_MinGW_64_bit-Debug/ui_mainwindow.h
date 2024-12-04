@@ -11,9 +11,13 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
 
@@ -24,8 +28,17 @@ class Ui_MainWindow
 public:
     QWidget *centralwidget;
     QLabel *ImageLabel;
-    QLabel *InputLabel;
-    QLabel *ExpressionLabel;
+    QPushButton *buttonBuildTree;
+    QLabel *label;
+    QLineEdit *lineEditExpression;
+    QComboBox *comboBoxExpressionType;
+    QLabel *label_2;
+    QPushButton *buttonInorderTraversal;
+    QPushButton *buttonPreorderTraversal;
+    QPushButton *buttonPostorderTraversal;
+    QGraphicsView *graphicsViewTree;
+    QLabel *labelTraversalOutput;
+    QLabel *label_3;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -38,17 +51,47 @@ public:
         centralwidget->setObjectName("centralwidget");
         ImageLabel = new QLabel(centralwidget);
         ImageLabel->setObjectName("ImageLabel");
-        ImageLabel->setGeometry(QRect(0, 0, 800, 600));
-        InputLabel = new QLabel(centralwidget);
-        InputLabel->setObjectName("InputLabel");
-        InputLabel->setGeometry(QRect(220, 130, 63, 20));
-        ExpressionLabel = new QLabel(centralwidget);
-        ExpressionLabel->setObjectName("ExpressionLabel");
-        ExpressionLabel->setGeometry(QRect(240, 190, 63, 20));
+        ImageLabel->setGeometry(QRect(250, 40, 800, 600));
+        buttonBuildTree = new QPushButton(centralwidget);
+        buttonBuildTree->setObjectName("buttonBuildTree");
+        buttonBuildTree->setGeometry(QRect(160, 520, 62, 21));
+        label = new QLabel(centralwidget);
+        label->setObjectName("label");
+        label->setGeometry(QRect(30, 490, 71, 20));
+        lineEditExpression = new QLineEdit(centralwidget);
+        lineEditExpression->setObjectName("lineEditExpression");
+        lineEditExpression->setGeometry(QRect(80, 490, 113, 20));
+        comboBoxExpressionType = new QComboBox(centralwidget);
+        comboBoxExpressionType->addItem(QString());
+        comboBoxExpressionType->addItem(QString());
+        comboBoxExpressionType->addItem(QString());
+        comboBoxExpressionType->setObjectName("comboBoxExpressionType");
+        comboBoxExpressionType->setGeometry(QRect(80, 520, 59, 22));
+        label_2 = new QLabel(centralwidget);
+        label_2->setObjectName("label_2");
+        label_2->setGeometry(QRect(40, 520, 41, 14));
+        buttonInorderTraversal = new QPushButton(centralwidget);
+        buttonInorderTraversal->setObjectName("buttonInorderTraversal");
+        buttonInorderTraversal->setGeometry(QRect(380, 520, 62, 21));
+        buttonPreorderTraversal = new QPushButton(centralwidget);
+        buttonPreorderTraversal->setObjectName("buttonPreorderTraversal");
+        buttonPreorderTraversal->setGeometry(QRect(300, 520, 62, 21));
+        buttonPostorderTraversal = new QPushButton(centralwidget);
+        buttonPostorderTraversal->setObjectName("buttonPostorderTraversal");
+        buttonPostorderTraversal->setGeometry(QRect(460, 520, 62, 21));
+        graphicsViewTree = new QGraphicsView(centralwidget);
+        graphicsViewTree->setObjectName("graphicsViewTree");
+        graphicsViewTree->setGeometry(QRect(100, 30, 561, 431));
+        labelTraversalOutput = new QLabel(centralwidget);
+        labelTraversalOutput->setObjectName("labelTraversalOutput");
+        labelTraversalOutput->setGeometry(QRect(370, 490, 101, 16));
+        label_3 = new QLabel(centralwidget);
+        label_3->setObjectName("label_3");
+        label_3->setGeometry(QRect(320, 490, 41, 14));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 800, 25));
+        menubar->setGeometry(QRect(0, 0, 800, 20));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
@@ -63,8 +106,18 @@ public:
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
         ImageLabel->setText(QString());
-        InputLabel->setText(QCoreApplication::translate("MainWindow", "ABC", nullptr));
-        ExpressionLabel->setText(QCoreApplication::translate("MainWindow", "TextLabAhmedel", nullptr));
+        buttonBuildTree->setText(QCoreApplication::translate("MainWindow", "Build", nullptr));
+        label->setText(QCoreApplication::translate("MainWindow", "Expression", nullptr));
+        comboBoxExpressionType->setItemText(0, QCoreApplication::translate("MainWindow", "Prefix", nullptr));
+        comboBoxExpressionType->setItemText(1, QCoreApplication::translate("MainWindow", "Infix", nullptr));
+        comboBoxExpressionType->setItemText(2, QCoreApplication::translate("MainWindow", "Postfix", nullptr));
+
+        label_2->setText(QCoreApplication::translate("MainWindow", "Type", nullptr));
+        buttonInorderTraversal->setText(QCoreApplication::translate("MainWindow", "Infix", nullptr));
+        buttonPreorderTraversal->setText(QCoreApplication::translate("MainWindow", "Prefix", nullptr));
+        buttonPostorderTraversal->setText(QCoreApplication::translate("MainWindow", "Postfix", nullptr));
+        labelTraversalOutput->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
+        label_3->setText(QCoreApplication::translate("MainWindow", "Output:", nullptr));
     } // retranslateUi
 
 };
