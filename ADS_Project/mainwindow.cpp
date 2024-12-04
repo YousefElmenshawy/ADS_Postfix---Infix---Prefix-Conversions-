@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     , tree(new ExpressionTree()) // Initialize the expression tree
 {
     ui->setupUi(this);
+    this->setStyleSheet("background-color: lightblue;");
 }
 
 MainWindow::~MainWindow() {

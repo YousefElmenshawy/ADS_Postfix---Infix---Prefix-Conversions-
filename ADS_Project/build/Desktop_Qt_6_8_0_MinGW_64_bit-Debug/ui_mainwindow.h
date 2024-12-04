@@ -57,10 +57,10 @@ public:
         buttonBuildTree->setGeometry(QRect(160, 520, 62, 21));
         label = new QLabel(centralwidget);
         label->setObjectName("label");
-        label->setGeometry(QRect(30, 490, 71, 20));
+        label->setGeometry(QRect(30, 490, 51, 20));
         lineEditExpression = new QLineEdit(centralwidget);
         lineEditExpression->setObjectName("lineEditExpression");
-        lineEditExpression->setGeometry(QRect(80, 490, 113, 20));
+        lineEditExpression->setGeometry(QRect(90, 490, 113, 20));
         comboBoxExpressionType = new QComboBox(centralwidget);
         comboBoxExpressionType->addItem(QString());
         comboBoxExpressionType->addItem(QString());
@@ -81,10 +81,10 @@ public:
         buttonPostorderTraversal->setGeometry(QRect(460, 520, 62, 21));
         graphicsViewTree = new QGraphicsView(centralwidget);
         graphicsViewTree->setObjectName("graphicsViewTree");
-        graphicsViewTree->setGeometry(QRect(100, 30, 561, 431));
+        graphicsViewTree->setGeometry(QRect(0, 10, 791, 451));
         labelTraversalOutput = new QLabel(centralwidget);
         labelTraversalOutput->setObjectName("labelTraversalOutput");
-        labelTraversalOutput->setGeometry(QRect(370, 490, 101, 16));
+        labelTraversalOutput->setGeometry(QRect(370, 490, 181, 21));
         label_3 = new QLabel(centralwidget);
         label_3->setObjectName("label_3");
         label_3->setGeometry(QRect(320, 490, 41, 14));
