@@ -1,22 +1,31 @@
-#include "mainwindow.h"
 #include "expressiontree.h"
+#include "TreeNode.h"
 #include <QApplication>
-#include <iostream>
-using namespace std;
+#include <QGraphicsScene>
+#include <QGraphicsView>
 
+int main(int argc, char* argv[]) {
+    QApplication app(argc, argv);
 
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
-   // MainWindow w;
-    //w.show();
+    // Create ExpressionTree
+    ExpressionTree tree;
 
-    // Testing the program
-    ExpressionTree Tree;
-    Tree.displayConversionMenu(Tree);
+    // Example: Build tree from a postfix expression
+    QString postfix = "3 4 + 5 * 6 +";
+    tree.buildfromPostfix(postfix);
 
+    // Create a scene for visualization
+    QGraphicsScene scene;
 
+    // Visualize the tree starting from the root
+    tree.visualizeTree(&scene, tree.Root_Accesser(), 400, 50, 200, 100);
 
-    return a.exec();
+    // Create a view and display the scene
+    QGraphicsView view(&scene);
+    view.setRenderHint(QPainter::Antialiasing);
+    view.setWindowTitle("Expression Tree Visualization");
+    view.resize(800, 600);
+    view.show();
 
+    return app.exec();
 }

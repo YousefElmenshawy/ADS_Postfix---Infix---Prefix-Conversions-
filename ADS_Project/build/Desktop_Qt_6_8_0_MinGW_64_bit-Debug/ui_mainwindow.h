@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
@@ -22,6 +23,9 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
+    QLabel *ImageLabel;
+    QLabel *InputLabel;
+    QLabel *ExpressionLabel;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -32,6 +36,15 @@ public:
         MainWindow->resize(800, 600);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
+        ImageLabel = new QLabel(centralwidget);
+        ImageLabel->setObjectName("ImageLabel");
+        ImageLabel->setGeometry(QRect(0, 0, 800, 600));
+        InputLabel = new QLabel(centralwidget);
+        InputLabel->setObjectName("InputLabel");
+        InputLabel->setGeometry(QRect(220, 130, 63, 20));
+        ExpressionLabel = new QLabel(centralwidget);
+        ExpressionLabel->setObjectName("ExpressionLabel");
+        ExpressionLabel->setGeometry(QRect(240, 190, 63, 20));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
@@ -49,6 +62,9 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
+        ImageLabel->setText(QString());
+        InputLabel->setText(QCoreApplication::translate("MainWindow", "ABC", nullptr));
+        ExpressionLabel->setText(QCoreApplication::translate("MainWindow", "TextLabAhmedel", nullptr));
     } // retranslateUi
 
 };

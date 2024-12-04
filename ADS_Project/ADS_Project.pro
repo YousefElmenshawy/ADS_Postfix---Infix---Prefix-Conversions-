@@ -16,6 +16,7 @@ SOURCES += \
 
 
 HEADERS += \
+    TreeNode.h \
     conversionwindow.h \
     expressiontree.h \
     mainwindow.h

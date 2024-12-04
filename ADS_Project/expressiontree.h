@@ -2,6 +2,12 @@
 #define EXPRESSIONTREE_H
 #include<QString>
 #include<stack>
+#include <QGraphicsScene>
+#include <QGraphicsEllipseItem>
+#include <QGraphicsTextItem>
+#include <QGraphicsLineItem>
+#include <QPen>
+#include <QBrush>
 
 using namespace std;
 
@@ -42,6 +48,7 @@ public:
     QString ToPostfix(TreeNode* Root);
     QString ToPrefix(TreeNode* Root);
     TreeNode * Root_Accesser ();// helper function for the main
+    void visualizeTree(QGraphicsScene* scene, TreeNode* node, double x, double y, double xOffset, double yOffset);
 
 
 };

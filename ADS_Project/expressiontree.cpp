@@ -1,9 +1,16 @@
 #include "expressiontree.h"
+#include "TreeNode.h"
 #include <stack>
 #include <QString>
 #include <QVector>
 #include<iostream>
 #include <QTextStream>
+#include <QGraphicsScene>
+#include <QGraphicsEllipseItem>
+#include <QGraphicsTextItem>
+#include <QGraphicsLineItem>
+#include <QPen>
+#include <QBrush>
 using namespace std;
 ExpressionTree::ExpressionTree():root(nullptr) {
 
@@ -33,6 +40,30 @@ ExpressionTree& ExpressionTree::operator=(const ExpressionTree& other) {
     }
     return *this;
 }
+
+
+void ExpressionTree::visualizeTree(QGraphicsScene* scene, TreeNode* node, double x, double y, double xOffset, double yOffset) {
+    if (!node) return;
+
+    // Draw current node
+    QGraphicsEllipseItem* ellipse = scene->addEllipse(x - 30, y - 30, 60, 60, QPen(Qt::black), QBrush(Qt::lightGray));
+    QGraphicsTextItem* text = scene->addText(node->value);
+    text->setPos(x - text->boundingRect().width() / 2, y - text->boundingRect().height() / 2);
+
+    // Calculate horizontal position for children
+    double childX = x - (xOffset * (node->left && node->right ? 1 : 0.5));
+
+    if (node->left) {
+        scene->addLine(x, y + 30, childX, y + yOffset - 30, QPen(Qt::black));
+        visualizeTree(scene, node->left, childX, y + yOffset, xOffset / 2, yOffset);
+    }
+
+    if (node->right) {
+        scene->addLine(x, y + 30, x + xOffset, y + yOffset - 30, QPen(Qt::black));
+        visualizeTree(scene, node->right, x + xOffset, y + yOffset, xOffset / 2, yOffset);
+    }
+}
+
 void ExpressionTree::clearTree(TreeNode *node) {
     if (node == nullptr) return;
     clearTree(node->left);
