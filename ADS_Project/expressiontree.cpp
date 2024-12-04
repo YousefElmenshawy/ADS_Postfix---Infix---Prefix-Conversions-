@@ -40,62 +40,37 @@ ExpressionTree& ExpressionTree::operator=(const ExpressionTree& other) {
     }
     return *this;
 }
-void ExpressionTree::startTraversal(const QString& type, std::function<void(QString)> callback) {
-    if (type == "Inorder") {
-        traverseInorder(root, callback);
-    } else if (type == "Preorder") {
-        traversePreorder(root, callback);
-    } else if (type == "Postorder") {
-        traversePostorder(root, callback);
-    }
-}
 
-void ExpressionTree::traverseInorder(TreeNode* node, std::function<void(QString)> callback) {
-    if (!node) return;
-    traverseInorder(node->left, callback);
-    callback(node->value); // Visit node
-    traverseInorder(node->right, callback);
-}
 
-void ExpressionTree::traversePreorder(TreeNode* node, std::function<void(QString)> callback) {
-    if (!node) return;
-    callback(node->value); // Visit node
-    traversePreorder(node->left, callback);
-    traversePreorder(node->right, callback);
-}
 
-void ExpressionTree::traversePostorder(TreeNode* node, std::function<void(QString)> callback) {
-    if (!node) return;
-    traversePostorder(node->left, callback);
-    traversePostorder(node->right, callback);
-    callback(node->value); // Visit node
-}
 
 
 
 // expressiontree.cpp
-void ExpressionTree::visualizeTree(QGraphicsScene* scene, TreeNode* root, double x, double y, double hOffset, double vOffset) {
-    if (!root) return;
+void ExpressionTree::visualizeTree(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset) {
+    if (!node) return;
 
-    // Draw the current node
-    auto ellipse = scene->addEllipse(x - 20, y - 20, 40, 40, QPen(Qt::black), QBrush(Qt::lightGray));
-    auto text = scene->addText(QString(root->value));
+    // Draw current node
+    QGraphicsEllipseItem* ellipse = scene->addEllipse(x - 30, y - 30, 60, 60, QPen(Qt::black), QBrush(Qt::lightGray));
+    QGraphicsTextItem* text = scene->addText(QString(node->value));
     text->setDefaultTextColor(Qt::black);
-    text->setPos(x - 10, y - 10);
+    text->setPos(x - text->boundingRect().width() / 2, y - text->boundingRect().height() / 2);
 
-    // Make text a child of the ellipse for easy traversal
+    // Make the text a child of the ellipse
     text->setParentItem(ellipse);
 
-    // Recursively draw left and right subtrees
-    if (root->left) {
-        scene->addLine(x, y, x - hOffset, y + vOffset, QPen(Qt::black));
-        visualizeTree(scene, root->left, x - hOffset, y + vOffset, hOffset / 2, vOffset);
+    // Recursively draw left and right subtrees with calculated offsets
+    if (node->left) {
+        scene->addLine(x, y + 30, x - hOffset, y + vOffset - 30, QPen(Qt::black)); // Line to left child
+        visualizeTree(scene, node->left, x - hOffset, y + vOffset, hOffset / 2, vOffset);
     }
-    if (root->right) {
-        scene->addLine(x, y, x + hOffset, y + vOffset, QPen(Qt::black));
-        visualizeTree(scene, root->right, x + hOffset, y + vOffset, hOffset / 2, vOffset);
+
+    if (node->right) {
+        scene->addLine(x, y + 30, x + hOffset, y + vOffset - 30, QPen(Qt::black)); // Line to right child
+        visualizeTree(scene, node->right, x + hOffset, y + vOffset, hOffset / 2, vOffset);
     }
 }
+
 
 void ExpressionTree::clearTree(TreeNode *node) {
     if (node == nullptr) return;

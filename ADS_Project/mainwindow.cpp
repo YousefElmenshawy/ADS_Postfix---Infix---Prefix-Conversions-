@@ -43,49 +43,27 @@ void MainWindow::on_buttonBuildTree_clicked() {
 
 void MainWindow::on_buttonInorderTraversal_clicked() {
     ui->labelTraversalOutput->clear();
-    traversalSequence.clear();
-
-    // Start Inorder Traversal
-    tree->startTraversal("Inorder", [this](QString value) {
-        traversalStep(value);
-    });
+    QString inoredered= tree->ToInfix(tree->Root_Accesser());
+    ui->labelTraversalOutput->setText(inoredered);
 }
 
 void MainWindow::on_buttonPreorderTraversal_clicked() {
     ui->labelTraversalOutput->clear();
-    traversalSequence.clear();
+    QString preoredered= tree->ToPrefix(tree->Root_Accesser());
+    ui->labelTraversalOutput->setText(preoredered);
 
-    // Start Preorder Traversal
-    tree->startTraversal("Preorder", [this](QString value) {
-        traversalStep(value);
-    });
+
+
 }
 
 void MainWindow::on_buttonPostorderTraversal_clicked() {
     ui->labelTraversalOutput->clear();
-    traversalSequence.clear();
+    QString postordered= tree->ToPostfix(tree->Root_Accesser());
+    ui->labelTraversalOutput->setText(postordered);
 
-    // Start Postorder Traversal
-    tree->startTraversal("Postorder", [this](QString value) {
-        traversalStep(value);
-    });
 }
 
-void MainWindow::traversalStep(QString value) {
-    traversalSequence += value + " ";
-    ui->labelTraversalOutput->setText(traversalSequence);
 
-    // Find the node in the graphics scene and highlight it
-    auto node = findGraphicsNode(value);
-    if (node) {
-        node->setBrush(QBrush(Qt::yellow)); // Highlight the node with yellow color
-
-        // Revert the color back to the original after 500ms
-        QTimer::singleShot(500, [node]() {
-            node->setBrush(QBrush(Qt::lightGray)); // Reset to the default color
-        });
-    }
-}
 
 
 QGraphicsEllipseItem* MainWindow::findGraphicsNode(const QString& value) {
