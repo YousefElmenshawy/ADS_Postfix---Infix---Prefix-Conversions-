@@ -57,10 +57,10 @@ public:
         buttonBuildTree->setGeometry(QRect(160, 520, 62, 21));
         label = new QLabel(centralwidget);
         label->setObjectName("label");
-        label->setGeometry(QRect(30, 490, 51, 20));
+        label->setGeometry(QRect(30, 490, 61, 20));
         lineEditExpression = new QLineEdit(centralwidget);
         lineEditExpression->setObjectName("lineEditExpression");
-        lineEditExpression->setGeometry(QRect(90, 490, 113, 20));
+        lineEditExpression->setGeometry(QRect(100, 490, 151, 20));
         comboBoxExpressionType = new QComboBox(centralwidget);
         comboBoxExpressionType->addItem(QString());
         comboBoxExpressionType->addItem(QString());
@@ -84,7 +84,7 @@ public:
         graphicsViewTree->setGeometry(QRect(0, 10, 791, 451));
         labelTraversalOutput = new QLabel(centralwidget);
         labelTraversalOutput->setObjectName("labelTraversalOutput");
-        labelTraversalOutput->setGeometry(QRect(370, 490, 181, 21));
+        labelTraversalOutput->setGeometry(QRect(370, 480, 281, 31));
         label_3 = new QLabel(centralwidget);
         label_3->setObjectName("label_3");
         label_3->setGeometry(QRect(320, 490, 41, 14));
@@ -116,7 +116,7 @@ public:
         buttonInorderTraversal->setText(QCoreApplication::translate("MainWindow", "Infix", nullptr));
         buttonPreorderTraversal->setText(QCoreApplication::translate("MainWindow", "Prefix", nullptr));
         buttonPostorderTraversal->setText(QCoreApplication::translate("MainWindow", "Postfix", nullptr));
-        labelTraversalOutput->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
+        labelTraversalOutput->setText(QString());
         label_3->setText(QCoreApplication::translate("MainWindow", "Output:", nullptr));
     } // retranslateUi
 
