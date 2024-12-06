@@ -1,13 +1,14 @@
 #ifndef EXPRESSIONTREE_H
 #define EXPRESSIONTREE_H
 #include<QString>
-#include<stack>
+#include<ourstack.h>
 #include <QGraphicsScene>
 #include <QGraphicsEllipseItem>
 #include <QGraphicsTextItem>
 #include <QGraphicsLineItem>
 #include <QPen>
 #include <QBrush>
+
 
 using namespace std;
 
@@ -28,7 +29,7 @@ private:
     bool isOperator(QString s);
     double applyOperation(double a, double b, QChar op);
     int precedence(QChar op);
-    void processOperator(stack<TreeNode*>& nodeStack, stack<QChar>& operatorStack);
+    void processOperator(OurStack<TreeNode*>& nodeStack, OurStack<QChar>& operatorStack);
     TreeNode* copyTree(TreeNode* node);
 
 public:

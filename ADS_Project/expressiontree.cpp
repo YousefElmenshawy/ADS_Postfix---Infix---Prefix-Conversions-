@@ -137,7 +137,7 @@ double ExpressionTree::evaluateExpression()
 {
     QString postfix = ToPostfix(root);
     double result = 0;
-    stack<double> Store;
+    OurStack<double> Store(postfix.size());
     QTextStream ss(&postfix);
     QString token;
     while (!ss.atEnd()) {
@@ -264,8 +264,8 @@ void ExpressionTree::buildfromInfix(QString &infix) {// Yousef Elmenshawy
 
         // Remove spaces
         infix=removeSpaces(infix);
-        stack<TreeNode*> nodeStack;       // Stack for operands/subtrees
-        stack<QChar> operatorStack;       // Stack for operators
+        OurStack<TreeNode*> nodeStack(infix.size());       // Stack for operands/subtrees
+        OurStack<QChar> operatorStack(infix.size());       // Stack for operators
 
         // Process the infix expression character by character
         int i = 0;
@@ -353,7 +353,7 @@ QString ExpressionTree::ToInfix(TreeNode *Root)// Yousef Elmenshawy
 
 }
 
-void ExpressionTree::processOperator(stack<TreeNode*>& nodeStack, stack<QChar>& operatorStack) {// Helper function to avoid reptetion in Build from Infix code
+void ExpressionTree::processOperator(OurStack<TreeNode*>& nodeStack, OurStack<QChar>& operatorStack) {// Helper function to avoid reptetion in Build from Infix code
     if (nodeStack.size() < 2) {
         cerr << "Error: Insufficient operands for operator!" << endl;// Yousef Elmenshawy
         return;

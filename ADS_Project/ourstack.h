@@ -111,6 +111,10 @@ template <typename T>
 bool OurStack<T>::isEmpty() const {
     return top_index == -1;
 }
+template <typename T>
+bool OurStack<T>::empty() const {
+    return top_index == -1;
+}
 
 template <typename T>
 bool OurStack<T>::isFull() const {
@@ -146,7 +150,7 @@ const T& OurStack<T>::at(int index) const {
 // Explicit instantiation of OurStack for the types used in the project
 template class OurStack<int>;
 template class OurStack<double>;
-template class OurStack<char>;
+template class OurStack<QChar>;
 template class OurStack<TreeNode*>;
 
 #endif // OURSTACK_H
