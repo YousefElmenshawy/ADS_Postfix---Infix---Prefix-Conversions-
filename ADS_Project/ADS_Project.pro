@@ -12,14 +12,16 @@ SOURCES += \
     conversionwindow.cpp \
     expressiontree.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    ourstack.cpp
 
 
 HEADERS += \
     TreeNode.h \
     conversionwindow.h \
     expressiontree.h \
-    mainwindow.h
+    mainwindow.h \
+    ourstack.h
 
 
 FORMS += \
