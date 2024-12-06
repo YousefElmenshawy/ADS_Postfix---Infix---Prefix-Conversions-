@@ -7,7 +7,7 @@ using namespace std;
 
 // Implementations for the OurStack class template
 
-template <typename T>
+/*template <typename T>
 OurStack<T>::OurStack(int size) : capacity(size), top_index(-1) {
     arr = new T[capacity];
 }
@@ -109,6 +109,7 @@ const T& OurStack<T>::at(int index) const {
 
 // Explicit instantiation of OurStack for the types used in the project
 template class OurStack<int>;
-template class OurStack<char>;
 template class OurStack<double>;
+template class OurStack<char>;
 template class OurStack<TreeNode*>;
+*/

@@ -1,6 +1,6 @@
 #include "expressiontree.h"
 #include "TreeNode.h"
-#include <stack>
+#include"ourstack.h"
 #include <QString>
 #include <QVector>
 #include<iostream>
@@ -165,7 +165,7 @@ void ExpressionTree::buildfromPostfix(const QString &postfix) // Saif Sabry
         return;
     }
 
-    stack<TreeNode*> s;
+    OurStack<TreeNode*> s(postfix.size());
     QString multi_digit;
     for (QChar ch : postfix) {
   if (ch.isDigit()) {
@@ -211,7 +211,7 @@ void ExpressionTree::buildfromPrefix(const QString & prefix) // Ahmed Amgad
         throw std::invalid_argument("Prefix expression is empty!");
     }
 
-    stack<TreeNode*> s;
+    OurStack<TreeNode*> s(prefix.size());
     QVector<QString> tokens;
 
     QString currentToken;
@@ -324,7 +324,7 @@ void ExpressionTree::buildfromInfix(QString &infix) {// Yousef Elmenshawy
     }
 
 
-    QString ExpressionTree::removeSpaces(const QString& str) {
+    QString ExpressionTree::removeSpaces(const QString& str) {//Yousef Elmenshawy
         QString result;
         for (QChar ch : str) {
             if (!ch.isSpace()) {
@@ -355,7 +355,7 @@ QString ExpressionTree::ToInfix(TreeNode *Root)// Yousef Elmenshawy
 
 void ExpressionTree::processOperator(stack<TreeNode*>& nodeStack, stack<QChar>& operatorStack) {// Helper function to avoid reptetion in Build from Infix code
     if (nodeStack.size() < 2) {
-        cerr << "Error: Insufficient operands for operator!" << endl;
+        cerr << "Error: Insufficient operands for operator!" << endl;// Yousef Elmenshawy
         return;
     }
 
@@ -406,11 +406,11 @@ QString ExpressionTree::ToPrefix(TreeNode* Root) //Koussay Jaballah
     return PrefixExp;
 }
 
-ExpressionTree::TreeNode *ExpressionTree::Root_Accesser()
+ExpressionTree::TreeNode *ExpressionTree::Root_Accesser()// Yousef Elmenshawy
 {
     return root;
 }
-void ExpressionTree::displayConversionMenu(ExpressionTree& tree) {
+void ExpressionTree::displayConversionMenu(ExpressionTree& tree) {// Not needed now because of the GUI
     QString input;
     string Input;
     int choice=0;
