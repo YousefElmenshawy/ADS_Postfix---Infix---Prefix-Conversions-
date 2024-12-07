@@ -24,6 +24,7 @@ private slots:
     void on_buttonInorderTraversal_clicked();
     void on_buttonPreorderTraversal_clicked();
     void on_buttonPostorderTraversal_clicked();
+    void updateTraversalLabel(const QString& traversalString);
 
 private:
     // Helper methods

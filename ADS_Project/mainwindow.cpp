@@ -10,13 +10,15 @@ MainWindow::MainWindow(QWidget *parent)
     , tree(new ExpressionTree()),scene(new QGraphicsScene(this)) // Initialize the expression tree
 {
     ui->setupUi(this);
-    this->setStyleSheet("background-color: black;");
+    this->setStyleSheet("background-color: grey;");
     ui->graphicsViewTree->setScene(scene);
+    connect(tree, &ExpressionTree::updateTraversalOutput, this, &MainWindow::updateTraversalLabel);
 }
 
 MainWindow::~MainWindow() {
     delete ui;
     delete tree;
+    delete scene;
 }
 
 void MainWindow::on_buttonBuildTree_clicked() {
@@ -38,62 +40,52 @@ void MainWindow::on_buttonBuildTree_clicked() {
 
         // Visualize the tree
         tree->visualizeTree(scene, tree->Root_Accesser(), 400, 50, 200, 100);
-        //ui->labelTraversalOutput->clear(); // Clear traversal output
+        ui->labelTraversalOutput->clear(); // Clear traversal output
     } catch (const std::exception &e) {
         ui->labelTraversalOutput->setText(QString("Error: %1").arg(e.what()));
     }
 }
 
 void MainWindow::on_buttonInorderTraversal_clicked() {
-    ui->labelTraversalOutput->clear();
-    QString inoredered= tree->ToInfix(tree->Root_Accesser());
+
+    QString traversalString;
     //scene = new QGraphicsScene(this);
     //ui->graphicsViewTree->setScene(scene);
-    ui->labelTraversalOutput->setText(inoredered);
-    tree->animateTraversal(scene, tree->Root_Accesser(), "inorder");
-
+   // ui->labelTraversalOutput->setText( traversalString);
+    tree->animateTraversal(scene, tree->Root_Accesser(), "inorder", traversalString);
+    //ui->labelTraversalOutput->clear();
 }
 
 void MainWindow::on_buttonPreorderTraversal_clicked() {
-    ui->labelTraversalOutput->clear();
-    QString preoredered= tree->ToPrefix(tree->Root_Accesser());
+
+    QString traversalString;
     //scene = new QGraphicsScene(this);
     //ui->graphicsViewTree->setScene(scene);
-    ui->labelTraversalOutput->setText(preoredered);
-    tree->animateTraversal(scene, tree->Root_Accesser(), "preorder");
-
+     //ui->labelTraversalOutput->setText(traversalString);
+    tree->animateTraversal(scene, tree->Root_Accesser(), "preorder", traversalString);
+    //ui->labelTraversalOutput->clear();
 
 
 
 }
 
 void MainWindow::on_buttonPostorderTraversal_clicked() {
-    ui->labelTraversalOutput->clear();
-    QString postordered= tree->ToPostfix(tree->Root_Accesser());
-    ui->labelTraversalOutput->setText(postordered);
+
+    QString traversalString;
+   // ui->labelTraversalOutput->setText(traversalString);
     //scene = new QGraphicsScene(this);
     //ui->graphicsViewTree->setScene(scene);
-    tree->animateTraversal(scene, tree->Root_Accesser(), "postorder");
+    tree->animateTraversal(scene, tree->Root_Accesser(), "postorder", traversalString);
+    //ui->labelTraversalOutput->clear();
+
+}
+
+void MainWindow::updateTraversalLabel(const QString& traversalString) {
+    qDebug() << "Current traversal string: " << traversalString;
+    qDebug() << "Label visible: " << ui->labelTraversalOutput->isVisible();
+        ui->labelTraversalOutput->setText(traversalString);
 
 }
 
 
-
-
-QGraphicsEllipseItem* MainWindow::findGraphicsNode(const QString& value) {
-    auto items = ui->graphicsViewTree->scene()->items();
-    for (auto item : items) {
-        auto ellipse = dynamic_cast<QGraphicsEllipseItem*>(item);
-        if (ellipse) {
-            // Check if this ellipse has a child text item with the matching value
-            for (auto childItem : ellipse->childItems()) {
-                auto textItem = dynamic_cast<QGraphicsTextItem*>(childItem);
-                if (textItem && textItem->toPlainText() == value) {
-                    return ellipse;
-                }
-            }
-        }
-    }
-    return nullptr; // Return nullptr if the node is not found
-}
 

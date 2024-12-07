@@ -35,7 +35,6 @@ public:
    // ExpressionTree(const ExpressionTree& other);
    // ExpressionTree& operator=(const ExpressionTree& other);
     void reset();
-    void displayConversionMenu(ExpressionTree& tree);
     ~ExpressionTree();
     double evaluateExpression();
     void buildfromPostfix(const QString & postfix); // building expression tree from postfix expression
@@ -47,10 +46,10 @@ public:
     QString ToPrefix(TreeNode* Root);
     TreeNode * Root_Accesser ();// helper function for the main
     void visualizeTree(QGraphicsScene* scene, TreeNode* root, double x, double y, double hOffset, double vOffset);
-    void traverseInorder(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset);
-    void traversePreorder(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset);
-    void traversePostorder(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset);
-    void animateTraversal(QGraphicsScene* scene, TreeNode* root, const QString& order);
+    void traverseInorder(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset, QString&traversalString);
+    void traversePreorder(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset, QString&traversalString);
+    void traversePostorder(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset, QString&traversalString);
+    void animateTraversal(QGraphicsScene* scene, TreeNode* root, const QString& order,  QString&traversalString);
 
     void colorNode(QGraphicsEllipseItem* ellipse, QColor color);
     void moveToNextNode();
@@ -63,7 +62,8 @@ public:
     QTimer* timer;
     QList<QGraphicsEllipseItem*> nodesToColor;
     int currentNodeIndex;
-
+signals:
+    void updateTraversalOutput( const QString  &traversalString);
 
 };
 

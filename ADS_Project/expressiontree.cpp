@@ -18,7 +18,7 @@ using namespace std;
 ExpressionTree::ExpressionTree(QObject* parent)
     : QObject(parent),           // Initialize base class QObject first
     root(nullptr),              // Initialize root
-           // Initialize currentNodeIndex
+    // Initialize currentNodeIndex
     timer(new QTimer(this)),currentNodeIndex(0) {   // Initialize timer
     // Connect the timer's timeout signal to moveToNextNode
     connect(timer, &QTimer::timeout, this, &ExpressionTree::moveToNextNode);
@@ -70,7 +70,7 @@ ExpressionTree::~ExpressionTree() {
     clearTree(root);
 }
 bool ExpressionTree::isOperator(QChar c){
-  return c == '+' || c == '-' || c == '*' || c == '/' || c == '%';
+    return c == '+' || c == '-' || c == '*' || c == '/' || c == '%';
 }
 bool ExpressionTree::isOperator(QString s){
     return s == "+" || s == "-" || s == "*" || s == "/" || s =="%";
@@ -150,33 +150,33 @@ void ExpressionTree::buildfromPostfix(const QString &postfix) // Saif Sabry
     OurStack<TreeNode*> s(postfix.size());
     QString multi_digit;
     for (QChar ch : postfix) {
-  if (ch.isDigit()) {
-      multi_digit.append(ch);
-  }
-  else {
-      if (!multi_digit.isEmpty()) {
-          s.push(new TreeNode(multi_digit));
-          multi_digit.clear();
-      }
+        if (ch.isDigit()) {
+            multi_digit.append(ch);
+        }
+        else {
+            if (!multi_digit.isEmpty()) {
+                s.push(new TreeNode(multi_digit));
+                multi_digit.clear();
+            }
 
-      if (isOperator(ch)) {
-          if (s.size() < 2) {
-              throw std::invalid_argument("Invalid postfix expression: not enough operands for operator!");
-          }
-          TreeNode* rightChild = s.top();
-          s.pop();
-          TreeNode* leftChild = s.top();
-          s.pop();
+            if (isOperator(ch)) {
+                if (s.size() < 2) {
+                    throw std::invalid_argument("Invalid postfix expression: not enough operands for operator!");
+                }
+                TreeNode* rightChild = s.top();
+                s.pop();
+                TreeNode* leftChild = s.top();
+                s.pop();
 
-          TreeNode* newNode = new TreeNode(ch);
-          newNode->left = leftChild;
-          newNode->right = rightChild;
-          s.push(newNode);
-      }
-      else if (!ch.isSpace()) {
-          throw std::invalid_argument("Invalid character in postfix expression!");
-      }
-  }
+                TreeNode* newNode = new TreeNode(ch);
+                newNode->left = leftChild;
+                newNode->right = rightChild;
+                s.push(newNode);
+            }
+            else if (!ch.isSpace()) {
+                throw std::invalid_argument("Invalid character in postfix expression!");
+            }
+        }
     }
     if (!multi_digit.isEmpty()) {
         s.push(new TreeNode(multi_digit));
@@ -239,82 +239,82 @@ void ExpressionTree::buildfromPrefix(const QString & prefix) // Ahmed Amgad
 
 void ExpressionTree::buildfromInfix(QString &infix) {// Yousef Elmenshawy
 
-        // Yousef Elmenshawy
-        if (infix.isEmpty()) {
-            throw std::invalid_argument("Error: Infix expression is empty!");
+    // Yousef Elmenshawy
+    if (infix.isEmpty()) {
+        throw std::invalid_argument("Error: Infix expression is empty!");
+    }
+
+    // Remove spaces
+    infix=removeSpaces(infix);
+    OurStack<TreeNode*> nodeStack(infix.size());       // Stack for operands/subtrees
+    OurStack<QChar> operatorStack(infix.size());       // Stack for operators
+
+    // Process the infix expression character by character
+    int i = 0;
+    while (i < infix.size()) {
+        if (infix[i].isSpace()) {
+            i++; // Skip whitespaces
+            continue;
         }
 
-        // Remove spaces
-        infix=removeSpaces(infix);
-        OurStack<TreeNode*> nodeStack(infix.size());       // Stack for operands/subtrees
-        OurStack<QChar> operatorStack(infix.size());       // Stack for operators
-
-        // Process the infix expression character by character
-        int i = 0;
-        while (i < infix.size()) {
-            if (infix[i].isSpace()) {
-                i++; // Skip whitespaces
-                continue;
+        if (infix[i].isDigit() || infix[i].isLetter()) { // Handling multi-digit or variable names
+            QString numStr;
+            while (i < infix.size() && (infix[i].isDigit() || infix[i].isLetter())) {
+                numStr += infix[i++];
             }
-
-            if (infix[i].isDigit() || infix[i].isLetter()) { // Handling multi-digit or variable names
-                QString numStr;
-                while (i < infix.size() && (infix[i].isDigit() || infix[i].isLetter())) {
-                    numStr += infix[i++];
-                }
-                nodeStack.push(new TreeNode(numStr)); // Push operand as a tree node
-            } else if (infix[i] == '(') {
-                operatorStack.push(infix[i]);
-                i++;
-            } else if (infix[i] == ')') {
-                while (!operatorStack.empty() && operatorStack.top() != '(') {
-                    processOperator(nodeStack, operatorStack);
-                }
-                operatorStack.pop(); // Remove the '('
-                i++;
-            } else if (infix[i] == '-' &&
-                       (i == 0 || infix[i - 1] == '(' || isOperator(infix[i - 1].toLatin1()))) {
-                // Unary minus case: Start a negative number
-                i++; // Skip the '-'
-                QString numStr = "-";
-                while (i < infix.size() && infix[i].isDigit()) {
-                    numStr += infix[i++];
-                }
-                nodeStack.push(new TreeNode(numStr)); // Push negative operand as a tree node
-            } else if (isOperator(infix[i].toLatin1())) {
-                while (!operatorStack.empty() &&
-                       precedence(operatorStack.top().toLatin1()) >= precedence(infix[i].toLatin1())) {
-                    processOperator(nodeStack, operatorStack);
-                }
-                operatorStack.push(infix[i]); // Push the current operator
-                i++;
+            nodeStack.push(new TreeNode(numStr)); // Push operand as a tree node
+        } else if (infix[i] == '(') {
+            operatorStack.push(infix[i]);
+            i++;
+        } else if (infix[i] == ')') {
+            while (!operatorStack.empty() && operatorStack.top() != '(') {
+                processOperator(nodeStack, operatorStack);
             }
-        }
-
-        // Process remaining operators
-        while (!operatorStack.empty()) {
-            processOperator(nodeStack, operatorStack);
-        }
-
-        // The root of the tree is the only node left in the stack
-        if (!nodeStack.empty()) {
-            root = nodeStack.top();
-            nodeStack.pop();
-        } else {
-            cerr << "Error: Failed to build expression tree!";
+            operatorStack.pop(); // Remove the '('
+            i++;
+        } else if (infix[i] == '-' &&
+                   (i == 0 || infix[i - 1] == '(' || isOperator(infix[i - 1].toLatin1()))) {
+            // Unary minus case: Start a negative number
+            i++; // Skip the '-'
+            QString numStr = "-";
+            while (i < infix.size() && infix[i].isDigit()) {
+                numStr += infix[i++];
+            }
+            nodeStack.push(new TreeNode(numStr)); // Push negative operand as a tree node
+        } else if (isOperator(infix[i].toLatin1())) {
+            while (!operatorStack.empty() &&
+                   precedence(operatorStack.top().toLatin1()) >= precedence(infix[i].toLatin1())) {
+                processOperator(nodeStack, operatorStack);
+            }
+            operatorStack.push(infix[i]); // Push the current operator
+            i++;
         }
     }
 
-
-    QString ExpressionTree::removeSpaces(const QString& str) {//Yousef Elmenshawy
-        QString result;
-        for (QChar ch : str) {
-            if (!ch.isSpace()) {
-                result += ch;
-            }
-        }
-        return result;
+    // Process remaining operators
+    while (!operatorStack.empty()) {
+        processOperator(nodeStack, operatorStack);
     }
+
+    // The root of the tree is the only node left in the stack
+    if (!nodeStack.empty()) {
+        root = nodeStack.top();
+        nodeStack.pop();
+    } else {
+        cerr << "Error: Failed to build expression tree!";
+    }
+}
+
+
+QString ExpressionTree::removeSpaces(const QString& str) {//Yousef Elmenshawy
+    QString result;
+    for (QChar ch : str) {
+        if (!ch.isSpace()) {
+            result += ch;
+        }
+    }
+    return result;
+}
 
 QString ExpressionTree::ToInfix(TreeNode *Root)// Yousef Elmenshawy
 {
@@ -366,7 +366,7 @@ QString ExpressionTree::ToPostfix(TreeNode* Root) //Koussay Jaballah
     }
 
     PostfixExp+= ToPostfix(Root->left); //Traverse left
-     PostfixExp+=ToPostfix(Root->right); //Traverse right
+    PostfixExp+=ToPostfix(Root->right); //Traverse right
 
     PostfixExp+= Root->value; // visit the node
     PostfixExp+=" ";
@@ -383,7 +383,7 @@ QString ExpressionTree::ToPrefix(TreeNode* Root) //Koussay Jaballah
     PrefixExp+=" ";
 
     PrefixExp= PrefixExp+ ToPrefix(Root->left); //Traverse left
-   PrefixExp+= ToPrefix(Root->right); //Traverse right
+    PrefixExp+= ToPrefix(Root->right); //Traverse right
 
     return PrefixExp;
 }
@@ -392,66 +392,7 @@ TreeNode *ExpressionTree::Root_Accesser()// Yousef Elmenshawy
 {
     return root;
 }
-void ExpressionTree::displayConversionMenu(ExpressionTree& tree) {// Not needed now because of the GUI
-    QString input;
-    string Input;
-    int choice=0;
-    cout << "Welcome to our Tree of expressions!";
-    while (choice!=7) {
-        cout << "\nExpression Conversion Menu:\n";
-        cout << "1. Infix to Postfix\n";
-        cout << "2. Infix to Prefix\n";
-        cout << "3. Postfix to Infix\n";
-        cout << "4. Postfix to Prefix\n";
-        cout << "5. Prefix to Infix\n";
-        cout << "6. Prefix to Postfix\n";
-        cout << "7. Exit\n";
-        cout << "Enter your choice: ";
-        cin >> choice;
 
-        cout << "Enter the expression: ";
-        cin.ignore(); // Clear newline from the input buffer
-        cin>>Input;
-        input = QString::fromStdString(Input);
-
-        try {
-            switch (choice) {
-            case 1: // Infix to Postfix
-                tree.buildfromInfix(input);
-                cout << "Postfix Expression: " << tree.ToPostfix(tree.Root_Accesser()).toStdString() << "\n";
-                break;
-            case 2: // Infix to Prefix
-                tree.buildfromInfix(input);
-                cout << "Prefix Expression: " << tree.ToPrefix(tree.Root_Accesser()).toStdString() << "\n";
-                break;
-            case 3: // Postfix to Infix
-                tree.buildfromPostfix(input);
-                cout << "Infix Expression: " << tree.ToInfix(tree.Root_Accesser()).toStdString() << "\n";
-                break;
-            case 4: // Postfix to Prefix
-                tree.buildfromPostfix(input);
-                cout << "Prefix Expression: " << tree.ToPrefix(tree.Root_Accesser()).toStdString() << "\n";
-                break;
-            case 5: // Prefix to Infix
-                tree.buildfromPrefix(input);
-                cout << "Infix Expression: " << tree.ToInfix(tree.Root_Accesser()).toStdString() << "\n";
-                break;
-            case 6: // Prefix to Postfix
-                tree.buildfromPrefix(input);
-                cout << "Postfix Expression: " << tree.ToPostfix(tree.Root_Accesser()).toStdString() << "\n";
-                break;
-            case 7:
-                cout << "Exiting the menu. Goodbye!\n";
-                break;
-            default:
-                cout << "Invalid choice! Please try again.\n";
-                break;
-            }
-        } catch (const std::exception& e) {
-            cout << e.what() << "\n";// just in case if there were any errors inside the switch case but it should be fine
-        }
-    }
-}
 void ExpressionTree::visualizeTree(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset) {
     if (!node) return;
 
@@ -476,7 +417,7 @@ void ExpressionTree::visualizeTree(QGraphicsScene* scene, TreeNode* node, double
         visualizeTree(scene, node->right, x + hOffset, y + vOffset, hOffset / 2, vOffset);
     }
 }
-void ExpressionTree::animateTraversal(QGraphicsScene* scene, TreeNode* root, const QString& order) {
+void ExpressionTree::animateTraversal(QGraphicsScene* scene, TreeNode* root, const QString& order, QString& traversalString) {
     currentNodeIndex = 0;
     nodesToColor.clear();
 
@@ -487,25 +428,25 @@ void ExpressionTree::animateTraversal(QGraphicsScene* scene, TreeNode* root, con
         pair.ellipse->setBrush(QBrush(Qt::lightGray));  // Reset to light gray color
     }
     if (order == "inorder") {
-        traverseInorder(scene, root, 400, 100, 100, 100); // Initial position and offset
+        traverseInorder(scene, root, 400, 100, 100, 100, traversalString); // Initial position and offset
     } else if (order == "preorder") {
-        traversePreorder(scene, root, 400, 100, 100, 100);
+        traversePreorder(scene, root, 400, 100, 100, 100,traversalString);
     } else if (order == "postorder") {
-        traversePostorder(scene, root, 400, 100, 100, 100);
+        traversePostorder(scene, root, 400, 100, 100, 100,traversalString);
     }
 
     timer->start(1000);  // Set the interval for each node color change
 
 }
 
-void ExpressionTree::traverseInorder(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset) {
+void ExpressionTree::traverseInorder(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset,QString& traversalString) {
     if (!node) return;
 
     // Traverse the left subtree
-    traverseInorder(scene, node->left, x - hOffset, y + vOffset, hOffset / 2, vOffset);
+    traverseInorder(scene, node->left, x - hOffset, y + vOffset, hOffset / 2, vOffset, traversalString);
 
     // Process current node
-   // QGraphicsEllipseItem* ellipse = scene->addEllipse(x - 30, y - 30, 60, 60, QPen(Qt::black), QBrush(Qt::lightGray));
+    // QGraphicsEllipseItem* ellipse = scene->addEllipse(x - 30, y - 30, 60, 60, QPen(Qt::black), QBrush(Qt::lightGray));
     //QGraphicsTextItem* text = scene->addText(QString(node->value));
     //text->setDefaultTextColor(Qt::black);
     //text->setPos(x - text->boundingRect().width() / 2, y - text->boundingRect().height() / 2);
@@ -517,20 +458,22 @@ void ExpressionTree::traverseInorder(QGraphicsScene* scene, TreeNode* node, doub
             break;
         }
     }
+    traversalString += node->value + " ";  // Add current node's value to the traversal string
+    emit updateTraversalOutput(traversalString);  // Emit signal to update label with the accumulated string
 
     // Traverse the right subtree
-    traverseInorder(scene, node->right, x + hOffset, y + vOffset, hOffset / 2, vOffset);
+    traverseInorder(scene, node->right, x + hOffset, y + vOffset, hOffset / 2, vOffset,  traversalString);
 }
 
-void ExpressionTree::traversePreorder(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset) {
+void ExpressionTree::traversePreorder(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset,QString& traversalString) {
     if (!node) return;
 
     // Process current node
     //QGraphicsEllipseItem* ellipse = scene->addEllipse(x - 30, y - 30, 60, 60, QPen(Qt::black), QBrush(Qt::lightGray));
-   // QGraphicsTextItem* text = scene->addText(QString(node->value));
-  //  text->setDefaultTextColor(Qt::black);
+    // QGraphicsTextItem* text = scene->addText(QString(node->value));
+    //  text->setDefaultTextColor(Qt::black);
     //text->setPos(x - text->boundingRect().width() / 2, y - text->boundingRect().height() / 2);
-  //  text->setParentItem(ellipse);
+    //  text->setParentItem(ellipse);
     // Process current node
     for (int i = 0; i < nodeEllipseList.size(); ++i) {
         if (nodeEllipseList[i].node == node) {
@@ -538,36 +481,37 @@ void ExpressionTree::traversePreorder(QGraphicsScene* scene, TreeNode* node, dou
             break;
         }
     }
+    traversalString += node->value + " ";  // Add current node's value to the traversal string
+    emit updateTraversalOutput(traversalString);  // Emit signal to update label with the accumulated string
 
     // Traverse the left subtree
-    traversePreorder(scene, node->left, x - hOffset, y + vOffset, hOffset / 2, vOffset);
+    traversePreorder(scene, node->left, x - hOffset, y + vOffset, hOffset / 2, vOffset,traversalString);
 
     // Traverse the right subtree
-    traversePreorder(scene, node->right, x + hOffset, y + vOffset, hOffset / 2, vOffset);
+    traversePreorder(scene, node->right, x + hOffset, y + vOffset, hOffset / 2, vOffset, traversalString);
 }
 
-void ExpressionTree::traversePostorder(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset) {
+void ExpressionTree::traversePostorder(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset, QString& traversalString) {
     if (!node) return;
 
     // Traverse the left subtree
-    traversePostorder(scene, node->left, x - hOffset, y + vOffset, hOffset / 2, vOffset);
+    traversePostorder(scene, node->left, x - hOffset, y + vOffset, hOffset / 2, vOffset,  traversalString);
 
     // Traverse the right subtree
-    traversePostorder(scene, node->right, x + hOffset, y + vOffset, hOffset / 2, vOffset);
+    traversePostorder(scene, node->right, x + hOffset, y + vOffset, hOffset / 2, vOffset, traversalString);
 
     // Process current node
-   // QGraphicsEllipseItem* ellipse = scene->addEllipse(x - 30, y - 30, 60, 60, QPen(Qt::black), QBrush(Qt::lightGray));
-    //QGraphicsTextItem* text = scene->addText(QString(node->value));
-   // text->setDefaultTextColor(Qt::black);
-  //  text->setPos(x - text->boundingRect().width() / 2, y - text->boundingRect().height() / 2);
-    //text->setParentItem(ellipse);
-    // Process current node
+
     for (int i = 0; i < nodeEllipseList.size(); ++i) {
         if (nodeEllipseList[i].node == node) {
             nodesToColor.append(nodeEllipseList[i].ellipse);
             break;
         }
     }
+    traversalString += node->value + " ";  // Add current node's value to the traversal string
+    emit updateTraversalOutput(traversalString);  // Emit signal to update label with the accumulated string
+
+    // Traverse the right subtree
 }
 
 void ExpressionTree::colorNode(QGraphicsEllipseItem* ellipse, QColor color) {
