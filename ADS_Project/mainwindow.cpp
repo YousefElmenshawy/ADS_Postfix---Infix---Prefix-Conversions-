@@ -38,7 +38,7 @@ void MainWindow::on_buttonBuildTree_clicked() {
 
         // Visualize the tree
         tree->visualizeTree(scene, tree->Root_Accesser(), 400, 50, 200, 100);
-        ui->labelTraversalOutput->clear(); // Clear traversal output
+        //ui->labelTraversalOutput->clear(); // Clear traversal output
     } catch (const std::exception &e) {
         ui->labelTraversalOutput->setText(QString("Error: %1").arg(e.what()));
     }
