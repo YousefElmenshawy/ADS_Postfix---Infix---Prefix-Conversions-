@@ -483,7 +483,9 @@ void ExpressionTree::animateTraversal(QGraphicsScene* scene, TreeNode* root, con
     timer = new QTimer();
     connect(timer, &QTimer::timeout, this, &ExpressionTree::moveToNextNode);
     // Clear the list of ellipses before traversal
-
+    for (auto& pair : nodeEllipseList) {
+        pair.ellipse->setBrush(QBrush(Qt::lightGray));  // Reset to light gray color
+    }
     if (order == "inorder") {
         traverseInorder(scene, root, 400, 100, 100, 100); // Initial position and offset
     } else if (order == "preorder") {
