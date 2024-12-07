@@ -29,7 +29,7 @@ private:
     // Helper methods
     void traversalStep(QString value);
     QGraphicsEllipseItem* findGraphicsNode(const QString& value);
-
+    QGraphicsScene *scene;
     // UI and data members
     Ui::MainWindow *ui;
     ExpressionTree *tree; // Expression tree instance

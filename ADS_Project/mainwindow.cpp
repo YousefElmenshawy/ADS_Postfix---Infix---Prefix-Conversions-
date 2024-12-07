@@ -2,14 +2,16 @@
 #include "ui_mainwindow.h"
 #include "expressiontree.h"
 #include <QTimer>
+#include<QGraphicsScene>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , tree(new ExpressionTree()) // Initialize the expression tree
+    , tree(new ExpressionTree()),scene(new QGraphicsScene(this)) // Initialize the expression tree
 {
     ui->setupUi(this);
     this->setStyleSheet("background-color: black;");
+    ui->graphicsViewTree->setScene(scene);
 }
 
 MainWindow::~MainWindow() {
@@ -31,7 +33,7 @@ void MainWindow::on_buttonBuildTree_clicked() {
         }
 
         // Clear the QGraphicsScene
-        auto scene = new QGraphicsScene(this);
+        scene = new QGraphicsScene(this);
         ui->graphicsViewTree->setScene(scene);
 
         // Visualize the tree
@@ -45,13 +47,21 @@ void MainWindow::on_buttonBuildTree_clicked() {
 void MainWindow::on_buttonInorderTraversal_clicked() {
     ui->labelTraversalOutput->clear();
     QString inoredered= tree->ToInfix(tree->Root_Accesser());
+    scene = new QGraphicsScene(this);
+    ui->graphicsViewTree->setScene(scene);
     ui->labelTraversalOutput->setText(inoredered);
+    tree->animateTraversal(scene, tree->Root_Accesser(), "inorder");
+
 }
 
 void MainWindow::on_buttonPreorderTraversal_clicked() {
     ui->labelTraversalOutput->clear();
     QString preoredered= tree->ToPrefix(tree->Root_Accesser());
+    scene = new QGraphicsScene(this);
+    ui->graphicsViewTree->setScene(scene);
     ui->labelTraversalOutput->setText(preoredered);
+    tree->animateTraversal(scene, tree->Root_Accesser(), "preorder");
+
 
 
 
@@ -61,6 +71,9 @@ void MainWindow::on_buttonPostorderTraversal_clicked() {
     ui->labelTraversalOutput->clear();
     QString postordered= tree->ToPostfix(tree->Root_Accesser());
     ui->labelTraversalOutput->setText(postordered);
+    scene = new QGraphicsScene(this);
+    ui->graphicsViewTree->setScene(scene);
+    tree->animateTraversal(scene, tree->Root_Accesser(), "postorder");
 
 }
 

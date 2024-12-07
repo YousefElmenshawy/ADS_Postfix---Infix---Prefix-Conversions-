@@ -12,16 +12,12 @@
 
 using namespace std;
 
-class ExpressionTree
+class ExpressionTree : public QObject
 {
+     Q_OBJECT
 private:
 
-    struct TreeNode {
-        QString value;
-        TreeNode* left;
-        TreeNode* right;
-        TreeNode( QString val) : value(val), left(nullptr), right(nullptr) {}
-    };
+
     TreeNode* root;
 
     //Helper Functions to be included in the Conversions
@@ -32,11 +28,12 @@ private:
     void processOperator(OurStack<TreeNode*>& nodeStack, OurStack<QChar>& operatorStack);
     TreeNode* copyTree(TreeNode* node);
 
+
 public:
-    ExpressionTree();
+    ExpressionTree(QObject* parent = nullptr);
     void clearTree(TreeNode* node);
-    ExpressionTree(const ExpressionTree& other);
-    ExpressionTree& operator=(const ExpressionTree& other);
+   // ExpressionTree(const ExpressionTree& other);
+   // ExpressionTree& operator=(const ExpressionTree& other);
     void reset();
     void displayConversionMenu(ExpressionTree& tree);
     ~ExpressionTree();
@@ -50,7 +47,17 @@ public:
     QString ToPrefix(TreeNode* Root);
     TreeNode * Root_Accesser ();// helper function for the main
     void visualizeTree(QGraphicsScene* scene, TreeNode* root, double x, double y, double hOffset, double vOffset);
+    void traverseInorder(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset);
+    void traversePreorder(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset);
+    void traversePostorder(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset);
+    void animateTraversal(QGraphicsScene* scene, TreeNode* root, const QString& order);
 
+    void colorNode(QGraphicsEllipseItem* ellipse, QColor color);
+    void moveToNextNode();
+
+    QTimer* timer;
+    QList<QGraphicsEllipseItem*> nodesToColor;
+    int currentNodeIndex;
 
 
 };
