@@ -28,10 +28,16 @@ void MainWindow::on_buttonBuildTree_clicked() {
     try {
         if (type == "Infix") {
             tree->buildfromInfix(expression);
+
+           ui->EvaluateLabel->setText( QString::number(tree->evaluateExpression()));
         } else if (type == "Prefix") {
             tree->buildfromPrefix(expression);
+            double Result = tree->evaluateExpression();
+                            QString Result2 = QString::number(Result);
+             ui->EvaluateLabel->setText(Result2);
         } else if (type == "Postfix") {
             tree->buildfromPostfix(expression);
+             ui->EvaluateLabel->setText( QString::number(tree->evaluateExpression()));
         }
 
         // Clear the QGraphicsScene
@@ -52,8 +58,11 @@ void MainWindow::on_buttonInorderTraversal_clicked() {
     //scene = new QGraphicsScene(this);
     //ui->graphicsViewTree->setScene(scene);
    // ui->labelTraversalOutput->setText( traversalString);
+
     tree->animateTraversal(scene, tree->Root_Accesser(), "inorder", traversalString);
     //ui->labelTraversalOutput->clear();
+
+
 }
 
 void MainWindow::on_buttonPreorderTraversal_clicked() {

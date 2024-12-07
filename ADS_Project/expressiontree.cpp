@@ -117,25 +117,42 @@ double ExpressionTree::applyOperation(double a, double b, QChar op) {
 
 double ExpressionTree::evaluateExpression()
 {
-    QString postfix = ToPostfix(root);
+
+    QString postfix = ToPostfix(root);  // Convert the expression tree to postfix notation
     double result = 0;
     OurStack<double> Store(postfix.size());
-    QTextStream ss(&postfix);
-    QString token;
-    while (!ss.atEnd()) {
-        ss >> token;
-        if(token[0].isDigit()) {
-            Store.push(token.toDouble());
-        }
-        else if(isOperator(token[0])) {
 
+    // Tokenize the postfix string by splitting it at spaces
+    QVector<QString> tokens;
+    QString currentToken;
+
+    for (QChar ch : postfix) {
+        if (ch == ' ') {
+            if (!currentToken.isEmpty()) {
+                tokens.append(currentToken);
+                currentToken.clear();
+            }
+        } else {
+            currentToken.append(ch);  // Add the character to the current token
+        }
+    }
+
+    if (!currentToken.isEmpty()) {  // In case there's a last token without a space at the end
+        tokens.append(currentToken);
+    }
+
+    for (const QString& token : tokens) {
+        if (token[0].isDigit()) {
+            Store.push(token.toDouble());  // Push the numeric value to the stack
+        }
+        else if (isOperator(token[0])) {  // Check if the token is an operator
             double a2 = Store.top(); Store.pop();
-            double a1=Store.top(); Store.pop();
-            result= applyOperation(a1,a2,token[0]);
+            double a1 = Store.top(); Store.pop();
+            result = applyOperation(a1, a2, token[0]);
             Store.push(result);
         }
-
     }
+
 
     return result;
 }
