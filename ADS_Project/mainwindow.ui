@@ -62,6 +62,9 @@
       <height>20</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(200, 9, 76)</string>
+    </property>
    </widget>
    <widget class="QComboBox" name="comboBoxExpressionType">
     <property name="geometry">
