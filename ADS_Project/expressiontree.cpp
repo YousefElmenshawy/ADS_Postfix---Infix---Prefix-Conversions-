@@ -34,24 +34,6 @@ TreeNode* ExpressionTree::copyTree(TreeNode* node) {
 
     return newNode;
 }
-/*ExpressionTree& ExpressionTree::operator=(const ExpressionTree& other) {
-    if (this == &other) {
-        return *this;
-    }
-    reset();
-    if (other.root != nullptr) {
-        root = copyTree(other.root);
-    }
-    return *this;
-}*/
-
-
-
-
-
-
-// expressiontree.cpp
-
 
 
 void ExpressionTree::clearTree(TreeNode *node) {
@@ -214,16 +196,16 @@ void ExpressionTree::buildfromPostfix(const QString &postfix) // Saif Sabry
     s.pop();
 }
 void ExpressionTree::buildfromPrefix(const QString & prefix) // Ahmed Amgad
-{
+{   //if the expression is empty an error is thrown
     if (prefix.isEmpty()) {
         throw std::invalid_argument("Prefix expression is empty!");
     }
 
-    OurStack<TreeNode*> s(prefix.size());
-    QVector<QString> tokens;
+    OurStack<TreeNode*> s(prefix.size());//a stack to hold the operators and operands as treeNodes
+    QVector<QString> tokens;//a vector to split the tokens in to traverse
 
     QString currentToken;
-    for (QChar ch : prefix) {
+    for (QChar ch : prefix) {//traverses the expression and every string or char seperated by spaces into a tokens vector
         if (ch == ' ') {
             if (!currentToken.isEmpty()) {
                 tokens.append(currentToken);
@@ -238,28 +220,31 @@ void ExpressionTree::buildfromPrefix(const QString & prefix) // Ahmed Amgad
     if (!currentToken.isEmpty()) {
         tokens.append(currentToken);  // Add the final token to the QVector
     }
-
+    //traverses the tokens in reverse except for the first token
     for (int i = tokens.size() - 1; i >= 0; --i) {
         QString token = tokens[i];
-
+        //if at any point an operator is encountered and there are no operands from the stack to be popped to
+        //be assigned as left and right childs of the operator then the expression must be invalid
         if (isOperator(token)) {
-            if (s.size() < 2) {
+            if (s.size() < 2) {//be assigned as left and right child of the oper
                 throw std::invalid_argument("Invalid prefix expression: not enough operands for operator!");
             }
-
+            //once the operator is encountered a new TreeNode is made andd two operands are popped from the stack to be its left and right child
             TreeNode* node = new TreeNode(token);
             node->left = s.top(); s.pop();
             node->right = s.top(); s.pop();
+            // The operator is then pushed into the TreeNode Stack and it will get poped along with its sibling to be children of a parent operator
             s.push(node);
         } else {
+            //if it is an operand simply push it in the stack
             s.push(new TreeNode(token));
         }
     }
-
+    //At the end there must be one remaing item which will be the root
     if (s.size() != 1) {
         throw std::invalid_argument("Invalid prefix expression: too many operands!");
     }
-
+    //the reamaining item is the root
     root = s.top();
 }
 
@@ -472,12 +457,6 @@ void ExpressionTree::traverseInorder(QGraphicsScene* scene, TreeNode* node, doub
     traverseInorder(scene, node->left, x - hOffset, y + vOffset, hOffset / 2, vOffset, traversalString);
 
     // Process current node
-    // QGraphicsEllipseItem* ellipse = scene->addEllipse(x - 30, y - 30, 60, 60, QPen(Qt::black), QBrush(Qt::lightGray));
-    //QGraphicsTextItem* text = scene->addText(QString(node->value));
-    //text->setDefaultTextColor(Qt::black);
-    //text->setPos(x - text->boundingRect().width() / 2, y - text->boundingRect().height() / 2);
-    //text->setParentItem(ellipse);
-    // Process current node
     for (int i = 0; i < nodeEllipseList.size(); ++i) {
         if (nodeEllipseList[i].node == node) {
             nodesToColor.append(nodeEllipseList[i].ellipse);
@@ -494,12 +473,6 @@ void ExpressionTree::traverseInorder(QGraphicsScene* scene, TreeNode* node, doub
 void ExpressionTree::traversePreorder(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset,QString& traversalString) {
     if (!node) return;
 
-    // Process current node
-    //QGraphicsEllipseItem* ellipse = scene->addEllipse(x - 30, y - 30, 60, 60, QPen(Qt::black), QBrush(Qt::lightGray));
-    // QGraphicsTextItem* text = scene->addText(QString(node->value));
-    //  text->setDefaultTextColor(Qt::black);
-    //text->setPos(x - text->boundingRect().width() / 2, y - text->boundingRect().height() / 2);
-    //  text->setParentItem(ellipse);
     // Process current node
     for (int i = 0; i < nodeEllipseList.size(); ++i) {
         if (nodeEllipseList[i].node == node) {

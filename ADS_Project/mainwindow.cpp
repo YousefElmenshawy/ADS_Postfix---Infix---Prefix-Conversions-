@@ -55,12 +55,8 @@ void MainWindow::on_buttonBuildTree_clicked() {
 void MainWindow::on_buttonInorderTraversal_clicked() {
 
     QString traversalString;
-    //scene = new QGraphicsScene(this);
-    //ui->graphicsViewTree->setScene(scene);
-   // ui->labelTraversalOutput->setText( traversalString);
-
     tree->animateTraversal(scene, tree->Root_Accesser(), "inorder", traversalString);
-    //ui->labelTraversalOutput->clear();
+
 
 
 }
@@ -68,11 +64,7 @@ void MainWindow::on_buttonInorderTraversal_clicked() {
 void MainWindow::on_buttonPreorderTraversal_clicked() {
 
     QString traversalString;
-    //scene = new QGraphicsScene(this);
-    //ui->graphicsViewTree->setScene(scene);
-     //ui->labelTraversalOutput->setText(traversalString);
     tree->animateTraversal(scene, tree->Root_Accesser(), "preorder", traversalString);
-    //ui->labelTraversalOutput->clear();
 
 
 
@@ -81,11 +73,8 @@ void MainWindow::on_buttonPreorderTraversal_clicked() {
 void MainWindow::on_buttonPostorderTraversal_clicked() {
 
     QString traversalString;
-   // ui->labelTraversalOutput->setText(traversalString);
-    //scene = new QGraphicsScene(this);
-    //ui->graphicsViewTree->setScene(scene);
     tree->animateTraversal(scene, tree->Root_Accesser(), "postorder", traversalString);
-    //ui->labelTraversalOutput->clear();
+
 
 }
 

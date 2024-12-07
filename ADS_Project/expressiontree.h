@@ -32,8 +32,6 @@ private:
 public:
     ExpressionTree(QObject* parent = nullptr);
     void clearTree(TreeNode* node);
-   // ExpressionTree(const ExpressionTree& other);
-   // ExpressionTree& operator=(const ExpressionTree& other);
     void reset();
     ~ExpressionTree();
     double evaluateExpression();
@@ -50,7 +48,6 @@ public:
     void traversePreorder(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset, QString&traversalString);
     void traversePostorder(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset, QString&traversalString);
     void animateTraversal(QGraphicsScene* scene, TreeNode* root, const QString& order,  QString&traversalString);
-
     void colorNode(QGraphicsEllipseItem* ellipse, QColor color);
     void moveToNextNode();
     struct NodeEllipsePair {
