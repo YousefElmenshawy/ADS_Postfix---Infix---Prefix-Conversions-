@@ -142,35 +142,41 @@ double ExpressionTree::evaluateExpression()
 
 void ExpressionTree::buildfromPostfix(const QString &postfix) // Saif Sabry
 {
+    // If the postfix string is empty, set the root to nullptr and return immediately.
     if (postfix.isEmpty()) {
         root = nullptr;
         return;
     }
-
+    // Create a stack to store TreeNode pointers during tree construction, with a size based on the length of the postfix expression.
     OurStack<TreeNode*> s(postfix.size());
     QString multi_digit;
+    // Iterate through each character in the postfix expression.
     for (QChar ch : postfix) {
+        // If the character is a digit, append it to the multi-digit string.
         if (ch.isDigit()) {
             multi_digit.append(ch);
         }
         else {
+            // If a multi-digit operand has been collected, create a new TreeNode for it, push it onto the stack, and clear the multi-digit string.
             if (!multi_digit.isEmpty()) {
                 s.push(new TreeNode(multi_digit));
                 multi_digit.clear();
             }
-
+            // If the character is an operator, check that there are at least two operands on the stack.
             if (isOperator(ch)) {
                 if (s.size() < 2) {
                     throw std::invalid_argument("Invalid postfix expression: not enough operands for operator!");
                 }
+                // Pop the top two nodes from the stack to use as children for the new operator node.
                 TreeNode* rightChild = s.top();
                 s.pop();
                 TreeNode* leftChild = s.top();
                 s.pop();
-
+                // Create a new TreeNode for the operator and attach the left and right children.
                 TreeNode* newNode = new TreeNode(ch);
                 newNode->left = leftChild;
                 newNode->right = rightChild;
+                 // Push the new operator node back onto the stack.
                 s.push(newNode);
             }
             else if (!ch.isSpace()) {
@@ -178,12 +184,15 @@ void ExpressionTree::buildfromPostfix(const QString &postfix) // Saif Sabry
             }
         }
     }
+     // If there's any remaining multi-digit operand, create a TreeNode for it and push it onto the stack.
     if (!multi_digit.isEmpty()) {
         s.push(new TreeNode(multi_digit));
     }
+    //case handling for too many operands
     if (s.size() != 1) {
         throw std::invalid_argument("Invalid postfix expression: too many operands!");
     }
+    // Set the root of the tree to the single remaining node on the stack.
     root = s.top();
     s.pop();
 }

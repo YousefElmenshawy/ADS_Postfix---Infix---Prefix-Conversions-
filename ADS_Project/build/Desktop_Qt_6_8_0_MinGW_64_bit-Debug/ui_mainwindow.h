@@ -57,16 +57,17 @@ public:
         buttonBuildTree->setGeometry(QRect(160, 520, 62, 21));
         label = new QLabel(centralwidget);
         label->setObjectName("label");
-        label->setGeometry(QRect(30, 490, 61, 20));
+        label->setGeometry(QRect(30, 490, 71, 20));
         lineEditExpression = new QLineEdit(centralwidget);
         lineEditExpression->setObjectName("lineEditExpression");
-        lineEditExpression->setGeometry(QRect(100, 490, 151, 20));
+        lineEditExpression->setGeometry(QRect(110, 490, 151, 20));
+        lineEditExpression->setStyleSheet(QString::fromUtf8("color: rgb(200, 9, 76)"));
         comboBoxExpressionType = new QComboBox(centralwidget);
         comboBoxExpressionType->addItem(QString());
         comboBoxExpressionType->addItem(QString());
         comboBoxExpressionType->addItem(QString());
         comboBoxExpressionType->setObjectName("comboBoxExpressionType");
-        comboBoxExpressionType->setGeometry(QRect(80, 520, 59, 22));
+        comboBoxExpressionType->setGeometry(QRect(80, 520, 71, 22));
         label_2 = new QLabel(centralwidget);
         label_2->setObjectName("label_2");
         label_2->setGeometry(QRect(40, 520, 41, 14));
@@ -84,14 +85,15 @@ public:
         graphicsViewTree->setGeometry(QRect(0, 10, 791, 451));
         labelTraversalOutput = new QLabel(centralwidget);
         labelTraversalOutput->setObjectName("labelTraversalOutput");
-        labelTraversalOutput->setGeometry(QRect(370, 480, 281, 31));
+        labelTraversalOutput->setGeometry(QRect(350, 480, 401, 31));
+        labelTraversalOutput->setStyleSheet(QString::fromUtf8("color: rgb(200, 9, 76)"));
         label_3 = new QLabel(centralwidget);
         label_3->setObjectName("label_3");
-        label_3->setGeometry(QRect(320, 490, 41, 14));
+        label_3->setGeometry(QRect(280, 490, 71, 16));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 800, 20));
+        menubar->setGeometry(QRect(0, 0, 800, 25));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
@@ -116,7 +118,7 @@ public:
         buttonInorderTraversal->setText(QCoreApplication::translate("MainWindow", "Infix", nullptr));
         buttonPreorderTraversal->setText(QCoreApplication::translate("MainWindow", "Prefix", nullptr));
         buttonPostorderTraversal->setText(QCoreApplication::translate("MainWindow", "Postfix", nullptr));
-        labelTraversalOutput->setText(QString());
+        labelTraversalOutput->setText(QCoreApplication::translate("MainWindow", "Loading...", nullptr));
         label_3->setText(QCoreApplication::translate("MainWindow", "Output:", nullptr));
     } // retranslateUi
 
