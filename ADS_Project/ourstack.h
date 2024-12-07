@@ -147,10 +147,7 @@ const T& OurStack<T>::at(int index) const {
     return arr[index];
 }
 
-// Explicit instantiation of OurStack for the types used in the project
-template class OurStack<int>;
-template class OurStack<double>;
-template class OurStack<QChar>;
-template class OurStack<TreeNode*>;
+
+
 
 #endif // OURSTACK_H
