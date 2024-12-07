@@ -54,7 +54,12 @@ public:
 
     void colorNode(QGraphicsEllipseItem* ellipse, QColor color);
     void moveToNextNode();
+    struct NodeEllipsePair {
+        TreeNode* node;
+        QGraphicsEllipseItem* ellipse;
+    };
 
+    QList<NodeEllipsePair> nodeEllipseList;
     QTimer* timer;
     QList<QGraphicsEllipseItem*> nodesToColor;
     int currentNodeIndex;

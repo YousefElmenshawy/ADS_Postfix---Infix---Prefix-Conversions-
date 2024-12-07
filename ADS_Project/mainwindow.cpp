@@ -47,8 +47,8 @@ void MainWindow::on_buttonBuildTree_clicked() {
 void MainWindow::on_buttonInorderTraversal_clicked() {
     ui->labelTraversalOutput->clear();
     QString inoredered= tree->ToInfix(tree->Root_Accesser());
-    scene = new QGraphicsScene(this);
-    ui->graphicsViewTree->setScene(scene);
+    //scene = new QGraphicsScene(this);
+    //ui->graphicsViewTree->setScene(scene);
     ui->labelTraversalOutput->setText(inoredered);
     tree->animateTraversal(scene, tree->Root_Accesser(), "inorder");
 
@@ -57,8 +57,8 @@ void MainWindow::on_buttonInorderTraversal_clicked() {
 void MainWindow::on_buttonPreorderTraversal_clicked() {
     ui->labelTraversalOutput->clear();
     QString preoredered= tree->ToPrefix(tree->Root_Accesser());
-    scene = new QGraphicsScene(this);
-    ui->graphicsViewTree->setScene(scene);
+    //scene = new QGraphicsScene(this);
+    //ui->graphicsViewTree->setScene(scene);
     ui->labelTraversalOutput->setText(preoredered);
     tree->animateTraversal(scene, tree->Root_Accesser(), "preorder");
 
@@ -71,8 +71,8 @@ void MainWindow::on_buttonPostorderTraversal_clicked() {
     ui->labelTraversalOutput->clear();
     QString postordered= tree->ToPostfix(tree->Root_Accesser());
     ui->labelTraversalOutput->setText(postordered);
-    scene = new QGraphicsScene(this);
-    ui->graphicsViewTree->setScene(scene);
+    //scene = new QGraphicsScene(this);
+    //ui->graphicsViewTree->setScene(scene);
     tree->animateTraversal(scene, tree->Root_Accesser(), "postorder");
 
 }

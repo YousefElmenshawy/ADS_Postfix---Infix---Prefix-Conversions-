@@ -22,6 +22,7 @@ ExpressionTree::ExpressionTree(QObject* parent)
     timer(new QTimer(this)),currentNodeIndex(0) {   // Initialize timer
     // Connect the timer's timeout signal to moveToNextNode
     connect(timer, &QTimer::timeout, this, &ExpressionTree::moveToNextNode);
+
 }
 TreeNode* ExpressionTree::copyTree(TreeNode* node) {
     if (node == nullptr) {
@@ -50,29 +51,7 @@ TreeNode* ExpressionTree::copyTree(TreeNode* node) {
 
 
 // expressiontree.cpp
-void ExpressionTree::visualizeTree(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset) {
-    if (!node) return;
 
-    // Draw current node
-    QGraphicsEllipseItem* ellipse = scene->addEllipse(x - 30, y - 30, 60, 60, QPen(Qt::black), QBrush(Qt::lightGray));
-    QGraphicsTextItem* text = scene->addText(QString(node->value));
-    text->setDefaultTextColor(Qt::black);
-    text->setPos(x - text->boundingRect().width() / 2, y - text->boundingRect().height() / 2);
-
-    // Make the text a child of the ellipse
-    text->setParentItem(ellipse);
-
-    // Recursively draw left and right subtrees with calculated offsets
-    if (node->left) {
-        scene->addLine(x, y + 30, x - hOffset, y + vOffset - 30, QPen(Qt::black)); // Line to left child
-        visualizeTree(scene, node->left, x - hOffset, y + vOffset, hOffset / 2, vOffset);
-    }
-
-    if (node->right) {
-        scene->addLine(x, y + 30, x + hOffset, y + vOffset - 30, QPen(Qt::black)); // Line to right child
-        visualizeTree(scene, node->right, x + hOffset, y + vOffset, hOffset / 2, vOffset);
-    }
-}
 
 
 void ExpressionTree::clearTree(TreeNode *node) {
@@ -473,12 +452,37 @@ void ExpressionTree::displayConversionMenu(ExpressionTree& tree) {// Not needed 
         }
     }
 }
+void ExpressionTree::visualizeTree(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset) {
+    if (!node) return;
+
+    // Draw current node
+    QGraphicsEllipseItem* ellipse = scene->addEllipse(x - 30, y - 30, 60, 60, QPen(Qt::black), QBrush(Qt::lightGray));
+    QGraphicsTextItem* text = scene->addText(QString(node->value));
+    text->setDefaultTextColor(Qt::black);
+    text->setPos(x - text->boundingRect().width() / 2, y - text->boundingRect().height() / 2);
+
+    // Make the text a child of the ellipse
+    text->setParentItem(ellipse);
+
+    nodeEllipseList.append({node, ellipse});
+    // Recursively draw left and right subtrees with calculated offsets
+    if (node->left) {
+        scene->addLine(x, y + 30, x - hOffset, y + vOffset - 30, QPen(Qt::black)); // Line to left child
+        visualizeTree(scene, node->left, x - hOffset, y + vOffset, hOffset / 2, vOffset);
+    }
+
+    if (node->right) {
+        scene->addLine(x, y + 30, x + hOffset, y + vOffset - 30, QPen(Qt::black)); // Line to right child
+        visualizeTree(scene, node->right, x + hOffset, y + vOffset, hOffset / 2, vOffset);
+    }
+}
 void ExpressionTree::animateTraversal(QGraphicsScene* scene, TreeNode* root, const QString& order) {
     currentNodeIndex = 0;
     nodesToColor.clear();
 
     timer = new QTimer();
     connect(timer, &QTimer::timeout, this, &ExpressionTree::moveToNextNode);
+    // Clear the list of ellipses before traversal
 
     if (order == "inorder") {
         traverseInorder(scene, root, 400, 100, 100, 100); // Initial position and offset
@@ -489,6 +493,7 @@ void ExpressionTree::animateTraversal(QGraphicsScene* scene, TreeNode* root, con
     }
 
     timer->start(1000);  // Set the interval for each node color change
+
 }
 
 void ExpressionTree::traverseInorder(QGraphicsScene* scene, TreeNode* node, double x, double y, double hOffset, double vOffset) {
@@ -498,12 +503,18 @@ void ExpressionTree::traverseInorder(QGraphicsScene* scene, TreeNode* node, doub
     traverseInorder(scene, node->left, x - hOffset, y + vOffset, hOffset / 2, vOffset);
 
     // Process current node
-    QGraphicsEllipseItem* ellipse = scene->addEllipse(x - 30, y - 30, 60, 60, QPen(Qt::black), QBrush(Qt::lightGray));
-    QGraphicsTextItem* text = scene->addText(QString(node->value));
-    text->setDefaultTextColor(Qt::black);
-    text->setPos(x - text->boundingRect().width() / 2, y - text->boundingRect().height() / 2);
-    text->setParentItem(ellipse);
-    nodesToColor.append(ellipse);
+   // QGraphicsEllipseItem* ellipse = scene->addEllipse(x - 30, y - 30, 60, 60, QPen(Qt::black), QBrush(Qt::lightGray));
+    //QGraphicsTextItem* text = scene->addText(QString(node->value));
+    //text->setDefaultTextColor(Qt::black);
+    //text->setPos(x - text->boundingRect().width() / 2, y - text->boundingRect().height() / 2);
+    //text->setParentItem(ellipse);
+    // Process current node
+    for (int i = 0; i < nodeEllipseList.size(); ++i) {
+        if (nodeEllipseList[i].node == node) {
+            nodesToColor.append(nodeEllipseList[i].ellipse);
+            break;
+        }
+    }
 
     // Traverse the right subtree
     traverseInorder(scene, node->right, x + hOffset, y + vOffset, hOffset / 2, vOffset);
@@ -513,12 +524,18 @@ void ExpressionTree::traversePreorder(QGraphicsScene* scene, TreeNode* node, dou
     if (!node) return;
 
     // Process current node
-    QGraphicsEllipseItem* ellipse = scene->addEllipse(x - 30, y - 30, 60, 60, QPen(Qt::black), QBrush(Qt::lightGray));
-    QGraphicsTextItem* text = scene->addText(QString(node->value));
-    text->setDefaultTextColor(Qt::black);
-    text->setPos(x - text->boundingRect().width() / 2, y - text->boundingRect().height() / 2);
-    text->setParentItem(ellipse);
-    nodesToColor.append(ellipse);
+    //QGraphicsEllipseItem* ellipse = scene->addEllipse(x - 30, y - 30, 60, 60, QPen(Qt::black), QBrush(Qt::lightGray));
+   // QGraphicsTextItem* text = scene->addText(QString(node->value));
+  //  text->setDefaultTextColor(Qt::black);
+    //text->setPos(x - text->boundingRect().width() / 2, y - text->boundingRect().height() / 2);
+  //  text->setParentItem(ellipse);
+    // Process current node
+    for (int i = 0; i < nodeEllipseList.size(); ++i) {
+        if (nodeEllipseList[i].node == node) {
+            nodesToColor.append(nodeEllipseList[i].ellipse);
+            break;
+        }
+    }
 
     // Traverse the left subtree
     traversePreorder(scene, node->left, x - hOffset, y + vOffset, hOffset / 2, vOffset);
@@ -537,12 +554,18 @@ void ExpressionTree::traversePostorder(QGraphicsScene* scene, TreeNode* node, do
     traversePostorder(scene, node->right, x + hOffset, y + vOffset, hOffset / 2, vOffset);
 
     // Process current node
-    QGraphicsEllipseItem* ellipse = scene->addEllipse(x - 30, y - 30, 60, 60, QPen(Qt::black), QBrush(Qt::lightGray));
-    QGraphicsTextItem* text = scene->addText(QString(node->value));
-    text->setDefaultTextColor(Qt::black);
-    text->setPos(x - text->boundingRect().width() / 2, y - text->boundingRect().height() / 2);
-    text->setParentItem(ellipse);
-    nodesToColor.append(ellipse);
+   // QGraphicsEllipseItem* ellipse = scene->addEllipse(x - 30, y - 30, 60, 60, QPen(Qt::black), QBrush(Qt::lightGray));
+    //QGraphicsTextItem* text = scene->addText(QString(node->value));
+   // text->setDefaultTextColor(Qt::black);
+  //  text->setPos(x - text->boundingRect().width() / 2, y - text->boundingRect().height() / 2);
+    //text->setParentItem(ellipse);
+    // Process current node
+    for (int i = 0; i < nodeEllipseList.size(); ++i) {
+        if (nodeEllipseList[i].node == node) {
+            nodesToColor.append(nodeEllipseList[i].ellipse);
+            break;
+        }
+    }
 }
 
 void ExpressionTree::colorNode(QGraphicsEllipseItem* ellipse, QColor color) {
@@ -552,7 +575,7 @@ void ExpressionTree::colorNode(QGraphicsEllipseItem* ellipse, QColor color) {
 void ExpressionTree::moveToNextNode() {
     if (currentNodeIndex < nodesToColor.size()) {
         // Color the next node (current node index)
-        colorNode(nodesToColor[currentNodeIndex], Qt::red);
+        colorNode(nodesToColor[currentNodeIndex], Qt::yellow);
 
         // Move to the next node
         ++currentNodeIndex;
