@@ -85,7 +85,7 @@ void OurStack<T>::push(const T& element) {
 template <typename T>
 void OurStack<T>::pop() {
     if (isEmpty()) {
-        throw underflow_error("Stack is empty");
+        //throw underflow_error("Stack is empty");
     }
     --top_index;
 }
@@ -93,7 +93,7 @@ void OurStack<T>::pop() {
 template <typename T>
 T& OurStack<T>::top() {
     if (isEmpty()) {
-        throw underflow_error("Stack is empty");
+        //throw underflow_error("Stack is empty");
     }
     return arr[top_index];
 }
@@ -101,7 +101,7 @@ T& OurStack<T>::top() {
 template <typename T>
 const T& OurStack<T>::top() const {
     if (isEmpty()) {
-        throw underflow_error("Stack is empty");
+        //throw underflow_error("Stack is empty");
     }
     return arr[top_index];
 }
