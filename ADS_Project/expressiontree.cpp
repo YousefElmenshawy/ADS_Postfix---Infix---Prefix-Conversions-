@@ -348,7 +348,7 @@ QString ExpressionTree::ToInfix(TreeNode *Root)// Yousef Elmenshawy
 
 void ExpressionTree::processOperator(OurStack<TreeNode*>& nodeStack, OurStack<QChar>& operatorStack) {// Helper function to avoid reptetion in Build from Infix code
     if (nodeStack.size() < 2) {
-        cerr << "Error: Insufficient operands for operator!" << endl;// Yousef Elmenshawy
+        throw std::invalid_argument ("Insufficient operands for operator!");// Yousef Elmenshawy
         return;
     }
 
