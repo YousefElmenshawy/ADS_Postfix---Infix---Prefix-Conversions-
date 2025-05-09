@@ -124,3 +124,8 @@ This project is ideal for:
 
 ---
 
+## 📬 Contact & Contributions
+
+If you have any questions or suggestions, feel free to reach out at **[yousefelmenshawi@aucegypt.edu](mailto:yousefelmenshawi@aucegypt.edu)**.
+
+🎉 **Contributions are welcome!** If you'd like to improve or extend the project, feel free to open a pull request.
