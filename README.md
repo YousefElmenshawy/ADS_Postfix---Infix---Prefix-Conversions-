@@ -106,6 +106,12 @@ A clean and interactive GUI is provided using **Qt**, allowing:
 
 ---
 
+## 🖼️ Live Conversion Demo
+
+![Gameplay Demo](./Assets/LiveConversion.gif)
+
+---
+
 ## 📚 Educational Use
 
 This project is ideal for:
